@@ -21,6 +21,7 @@ public class SkatingController : MonoBehaviour
     public float movingDrag = 0.5f;
     public float stationaryDrag = 0.9f;
     public float airDrag = 0.0f;
+    public float brakeDrag = 1.0f;
 
     [Header("Gravity/Jumping Variables")]
     public float normalGravity = 10.0f;
@@ -40,6 +41,8 @@ public class SkatingController : MonoBehaviour
     public float groundSnapDistance = 1.0f;
     public float maxSnapSpeed = 5.0f;
 
+    [Header("Braking Bool")]
+    public bool braking = false;
 
     // PRIVATE //
 
@@ -113,7 +116,6 @@ public class SkatingController : MonoBehaviour
 
         // Add force to player
         Vector3 moveVector = accelInput * moveForce * Time.fixedDeltaTime * transform.forward * accelMultiplier;
-        Debug.Log("Applied moveVector of " + moveVector);
         rigidBody.AddForce(moveVector, ForceMode.Impulse);
 
         // Rotate player
@@ -125,8 +127,13 @@ public class SkatingController : MonoBehaviour
 
     private void ApplyDrag(bool accelInput)
     {
-        currentDrag = accelInput ? movingDrag : stationaryDrag;
-        if (!isGrounded) { currentDrag = airDrag; }
+        if (!accelInput && !braking) { currentDrag = stationaryDrag; }
+        else
+        {
+            if (!isGrounded) { currentDrag = airDrag; }
+            else if (braking) { currentDrag = brakeDrag; }
+            else { currentDrag = movingDrag; }
+        }
 
         // Ignore vertical velocity for drag
         var currentVelocity = rigidBody.velocity;
