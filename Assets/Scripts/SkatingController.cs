@@ -16,6 +16,7 @@ public class SkatingController : MonoBehaviour
     public float maxSpeed = 20.0f;
     public float steeringSensitivity = 1.0f;
     [Range(0.0f, 1.0f)] public float airAcceleration = 0.0f;
+    [Range(0.0f, 1.0f)] public float steerHelper = 0.5f;
 
     [Header("Drag Variables")]
     public float movingDrag = 0.5f;
@@ -56,6 +57,7 @@ public class SkatingController : MonoBehaviour
     private bool jumpInput = false;
     private int framesSinceGrounded = 0;
     private int framesSinceJump = 0;
+    private float oldYRotation;
 
     private List<bool> groundedFrames;
 
@@ -90,6 +92,8 @@ public class SkatingController : MonoBehaviour
             contactNormal = Vector3.up;
         }
 
+
+
         SurfaceAlignment();
     }
 
@@ -121,6 +125,7 @@ public class SkatingController : MonoBehaviour
         // Rotate player
         transform.Rotate(Vector3.up * steering * steeringSensitivity);
 
+        SteerHelper();
         ApplyDrag(accelInput > 0.01f);
         CapSpeed();
     }
@@ -262,6 +267,25 @@ public class SkatingController : MonoBehaviour
         }
 
         return true;
+    }
+
+    private void SteerHelper()
+    {
+        if (!isGrounded) { return; }
+
+        // Avoid gimbal lock problems that will cause a sudden shift in direction
+        if (Mathf.Abs(oldYRotation - transform.eulerAngles.y) < 45.0f)
+        {
+            float turnAdjust = (transform.eulerAngles.y - oldYRotation) * steerHelper;
+            Quaternion velRotation = Quaternion.AngleAxis(turnAdjust, Vector3.up);
+            rigidBody.velocity = velRotation * rigidBody.velocity;
+        }
+        else if ((transform.eulerAngles.y - oldYRotation) * steerHelper < 75.0f)
+        {
+            rigidBody.velocity = rigidBody.velocity / 10.0f;
+        }
+
+        oldYRotation = transform.eulerAngles.y;
     }
 
     private void OnDrawGizmos()
