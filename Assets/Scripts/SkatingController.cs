@@ -97,7 +97,6 @@ public class SkatingController : MonoBehaviour
 
         // Add force to player
         Vector3 moveVector = accelInput * moveForce * Time.fixedDeltaTime * transform.forward * accelMultiplier;
-        Debug.Log("Applied moveVector of " + moveVector);
         rigidBody.AddForce(moveVector, ForceMode.Impulse);
 
         // Rotate player
