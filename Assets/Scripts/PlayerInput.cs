@@ -26,6 +26,8 @@ public class PlayerInput : MonoBehaviour
         controls.Player.AccelerateRelease.performed += _ => accelInput = 0.0f;
         controls.Player.JumpPress.performed += _ => { controller.Jump(); controller.UpdateJumpInput(true); };
         controls.Player.JumpRelease.performed += _ => controller.UpdateJumpInput(false);
+        controls.Player.BrakePress.performed += _ => controller.braking = true;
+        controls.Player.BrakeRelease.performed += _ => controller.braking = false;
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -35,7 +37,6 @@ public class PlayerInput : MonoBehaviour
     {
         // Deadzone
         if (Mathf.Abs(steeringInput) <= lAnalogStickDeadzone) { steeringInput = 0.0f; }
-
         controller.Move(steeringInput, accelInput);
     }
 }

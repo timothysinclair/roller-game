@@ -272,7 +272,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""name"": ""AD"",
                     ""id"": ""751ef62b-9a43-4610-be08-bd9779d79efd"",
                     ""path"": ""1DAxis"",
-                    ""interactions"": """",
+                    ""interactions"": ""Press(behavior=2)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Steering"",
