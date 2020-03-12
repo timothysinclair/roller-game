@@ -28,6 +28,8 @@ public class PlayerInput : MonoBehaviour
         controls.Player.JumpRelease.performed += _ => controller.UpdateJumpInput(false);
         controls.Player.BrakePress.performed += _ => controller.braking = true;
         controls.Player.BrakeRelease.performed += _ => controller.braking = false;
+        controls.Player.DriftPress.performed += _ => controller.drifting = true;
+        controls.Player.DriftRelease.performed += _ => controller.drifting = false;
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;

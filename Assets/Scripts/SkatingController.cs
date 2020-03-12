@@ -15,14 +15,16 @@ public class SkatingController : MonoBehaviour
     // Only counts horizontal speed
     public float maxSpeed = 20.0f;
     public float steeringSensitivity = 1.0f;
+    private const float driftTurningSpeed = 5.0f;
     [Range(0.0f, 1.0f)] public float airAcceleration = 0.0f;
     [Range(0.0f, 1.0f)] public float steerHelper = 0.5f;
 
-    [Header("Drag Variables")]
+    [Header("Fuck you")]
     public float movingDrag = 0.5f;
     public float stationaryDrag = 0.9f;
     public float airDrag = 0.0f;
-    public float brakeDrag = 1.0f;
+    public float brakeDrag = 0.75f;
+    public float driftDrag = 0.2f;
 
     [Header("Gravity/Jumping Variables")]
     public float normalGravity = 10.0f;
@@ -44,7 +46,8 @@ public class SkatingController : MonoBehaviour
 
     [Header("Braking Bool")]
     public bool braking = false;
-    private bool forcedBraking = false;
+    public bool forcedBraking = false;
+    public bool drifting = false;
 
     // PRIVATE //
 
@@ -93,8 +96,6 @@ public class SkatingController : MonoBehaviour
             contactNormal = Vector3.up;
         }
 
-
-
         SurfaceAlignment();
     }
 
@@ -124,7 +125,8 @@ public class SkatingController : MonoBehaviour
         rigidBody.AddForce(moveVector, ForceMode.Impulse);
 
         // Rotate player
-        transform.Rotate(Vector3.up * steering * steeringSensitivity);
+        float sensitivity = (drifting) ? driftTurningSpeed : steeringSensitivity;
+        transform.Rotate(Vector3.up * steering * sensitivity);
 
         SteerHelper();
         ApplyDrag(accelInput > 0.01f);
@@ -133,11 +135,12 @@ public class SkatingController : MonoBehaviour
 
     private void ApplyDrag(bool accelInput)
     {
-        if (!accelInput && (!braking && !forcedBraking)) { currentDrag = stationaryDrag; }
+        if (!accelInput && (!braking && !forcedBraking && !drifting)) { currentDrag = stationaryDrag; }
         else
         {
             if (!isGrounded) { currentDrag = airDrag; }
             else if (braking || forcedBraking) { currentDrag = brakeDrag; }
+            else if (drifting) { currentDrag = (accelInput) ? movingDrag + driftDrag : driftDrag; }
             else { currentDrag = movingDrag; }
         }
 
@@ -273,6 +276,8 @@ public class SkatingController : MonoBehaviour
     private void SteerHelper()
     {
         forcedBraking = false;
+
+        if (rigidBody.velocity.magnitude < 0.1f) { return; }
 
         if (!isGrounded || framesSinceJump < 2) { return; }
 
