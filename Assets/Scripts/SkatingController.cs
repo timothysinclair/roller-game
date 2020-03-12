@@ -30,7 +30,7 @@ public class SkatingController : MonoBehaviour
     public float jumpingGravity = 5.0f;
 
     [Tooltip("How many frames the player can still jump for if they fall off an edge")]
-    private int extraJumpFrames = 2;
+    public int extraJumpFrames = 2;
 
     [Header("Ground Checking")]
     public LayerMask groundLayers = -1;
@@ -207,7 +207,7 @@ public class SkatingController : MonoBehaviour
     {
         Quaternion rot = Quaternion.FromToRotation(transform.up, contactNormal) * transform.rotation;
 
-        transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.fixedDeltaTime * 10.0f);
+        transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.fixedDeltaTime * 5.0f);
 
 
     }
