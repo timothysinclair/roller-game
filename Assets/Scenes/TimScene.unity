@@ -13023,7 +13023,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 404740772}
-  m_LocalRotation: {x: 0.1924228, y: 0.30149326, z: -0.062262278, w: 0.9317718}
+  m_LocalRotation: {x: 0.19242282, y: 0.3014933, z: -0.06226229, w: 0.9317718}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -15480,7 +15480,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1100550886}
-  m_LocalRotation: {x: 0.19242282, y: 0.30149326, z: -0.06226222, w: 0.9317718}
+  m_LocalRotation: {x: 0.19242284, y: 0.3014933, z: -0.062262237, w: 0.9317718}
   m_LocalPosition: {x: -3.081346, y: 5.133, z: -4.2629695}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -16413,6 +16413,11 @@ PrefabInstance:
       propertyPath: steerHelper
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 2640909624092119696, guid: 5c820f46b46b800468de67fd9472939f,
+        type: 3}
+      propertyPath: brakeDrag
+      value: 0.75
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c820f46b46b800468de67fd9472939f, type: 3}
 --- !u!4 &1406760028 stripped
@@ -16561,7 +16566,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1505372401}
-  m_LocalRotation: {x: 0.20933948, y: 0.30031082, z: -0.06773579, w: 0.92811763}
+  m_LocalRotation: {x: 0.2093395, y: 0.30031082, z: -0.0677358, w: 0.92811763}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:

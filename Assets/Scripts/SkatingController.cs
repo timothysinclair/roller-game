@@ -44,6 +44,7 @@ public class SkatingController : MonoBehaviour
 
     [Header("Braking Bool")]
     public bool braking = false;
+    private bool forcedBraking = false;
 
     // PRIVATE //
 
@@ -132,11 +133,11 @@ public class SkatingController : MonoBehaviour
 
     private void ApplyDrag(bool accelInput)
     {
-        if (!accelInput && !braking) { currentDrag = stationaryDrag; }
+        if (!accelInput && (!braking && !forcedBraking)) { currentDrag = stationaryDrag; }
         else
         {
             if (!isGrounded) { currentDrag = airDrag; }
-            else if (braking) { currentDrag = brakeDrag; }
+            else if (braking || forcedBraking) { currentDrag = brakeDrag; }
             else { currentDrag = movingDrag; }
         }
 
@@ -271,21 +272,29 @@ public class SkatingController : MonoBehaviour
 
     private void SteerHelper()
     {
-        if (!isGrounded) { return; }
+        forcedBraking = false;
 
-        // Avoid gimbal lock problems that will cause a sudden shift in direction
-        if (Mathf.Abs(oldYRotation - transform.eulerAngles.y) < 45.0f)
+        if (!isGrounded || framesSinceJump < 2) { return; }
+
+        Vector3 forwardVec = transform.forward.normalized;
+        Vector3 velocity = rigidBody.velocity;
+
+        float dot = Vector3.Dot(forwardVec, velocity.normalized);
+
+        if (Mathf.Abs(dot) > 0.5f)
         {
-            float turnAdjust = (transform.eulerAngles.y - oldYRotation) * steerHelper;
-            Quaternion velRotation = Quaternion.AngleAxis(turnAdjust, Vector3.up);
-            rigidBody.velocity = velRotation * rigidBody.velocity;
+            if (dot < 0.0f) { forwardVec = -transform.forward; }
+            Vector3 newVelocity = Vector3.RotateTowards(velocity, forwardVec, 99999.0f, 9999999.0f);
+            newVelocity = newVelocity.normalized * velocity.magnitude;
+
+            rigidBody.velocity = newVelocity;
         }
-        else if ((transform.eulerAngles.y - oldYRotation) * steerHelper < 75.0f)
+        else
         {
-            rigidBody.velocity = rigidBody.velocity / 10.0f;
+            // Brake
+            forcedBraking = true;
         }
 
-        oldYRotation = transform.eulerAngles.y;
     }
 
     private void OnDrawGizmos()
