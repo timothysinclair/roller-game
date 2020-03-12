@@ -16,6 +16,7 @@ public class SkatingController : MonoBehaviour
     public float maxSpeed = 20.0f;
     public float steeringSensitivity = 1.0f;
     [Range(0.0f, 1.0f)] public float airAcceleration = 0.0f;
+    [Range(0.0f, 1.0f)] public float steerHelper = 0.5f;
 
     [Header("Drag Variables")]
     public float movingDrag = 0.5f;
@@ -43,6 +44,7 @@ public class SkatingController : MonoBehaviour
 
     [Header("Braking Bool")]
     public bool braking = false;
+    private bool forcedBraking = false;
 
     // PRIVATE //
 
@@ -56,6 +58,7 @@ public class SkatingController : MonoBehaviour
     private bool jumpInput = false;
     private int framesSinceGrounded = 0;
     private int framesSinceJump = 0;
+    private float oldYRotation;
 
     private List<bool> groundedFrames;
 
@@ -90,6 +93,8 @@ public class SkatingController : MonoBehaviour
             contactNormal = Vector3.up;
         }
 
+
+
         SurfaceAlignment();
     }
 
@@ -121,17 +126,18 @@ public class SkatingController : MonoBehaviour
         // Rotate player
         transform.Rotate(Vector3.up * steering * steeringSensitivity);
 
+        SteerHelper();
         ApplyDrag(accelInput > 0.01f);
         CapSpeed();
     }
 
     private void ApplyDrag(bool accelInput)
     {
-        if (!accelInput && !braking) { currentDrag = stationaryDrag; }
+        if (!accelInput && (!braking && !forcedBraking)) { currentDrag = stationaryDrag; }
         else
         {
             if (!isGrounded) { currentDrag = airDrag; }
-            else if (braking) { currentDrag = brakeDrag; }
+            else if (braking || forcedBraking) { currentDrag = brakeDrag; }
             else { currentDrag = movingDrag; }
         }
 
@@ -262,6 +268,33 @@ public class SkatingController : MonoBehaviour
         }
 
         return true;
+    }
+
+    private void SteerHelper()
+    {
+        forcedBraking = false;
+
+        if (!isGrounded || framesSinceJump < 2) { return; }
+
+        Vector3 forwardVec = transform.forward.normalized;
+        Vector3 velocity = rigidBody.velocity;
+
+        float dot = Vector3.Dot(forwardVec, velocity.normalized);
+
+        if (Mathf.Abs(dot) > 0.5f)
+        {
+            if (dot < 0.0f) { forwardVec = -transform.forward; }
+            Vector3 newVelocity = Vector3.RotateTowards(velocity, forwardVec, 99999.0f, 9999999.0f);
+            newVelocity = newVelocity.normalized * velocity.magnitude;
+
+            rigidBody.velocity = newVelocity;
+        }
+        else
+        {
+            // Brake
+            forcedBraking = true;
+        }
+
     }
 
     private void OnDrawGizmos()
