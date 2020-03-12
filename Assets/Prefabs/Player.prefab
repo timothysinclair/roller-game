@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2640909624092119698}
   - component: {fileID: 2640909624092119696}
   - component: {fileID: 2640909624092119699}
+  - component: {fileID: 9176149149370419767}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -131,12 +132,14 @@ MonoBehaviour:
   maxSpeed: 20
   steeringSensitivity: 3
   airAcceleration: 0
+  steerHelper: 0.5
   movingDrag: 0.5
   stationaryDrag: 0.01
   airDrag: 0
   brakeDrag: 1
   normalGravity: 20
   jumpingGravity: 10
+  extraJumpFrames: 2
   groundLayers:
     serializedVersion: 2
     m_Bits: 55
@@ -157,6 +160,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5703c8dded499f84786c7dd7ab45fd44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &9176149149370419767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2640909624092119689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e747a4c5608f1774682c79e97d305e89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCam: {fileID: 0}
+  fovCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 40
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 20
+      value: 60
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &2640909625141026321
 GameObject:
   m_ObjectHideFlags: 0
