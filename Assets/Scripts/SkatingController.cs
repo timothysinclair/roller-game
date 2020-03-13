@@ -182,7 +182,7 @@ public class SkatingController : MonoBehaviour
 
     private void CheckGrounded()
     {
-        isGrounded = Physics.CheckSphere(transform.position + Vector3.down * groundCheckDistance, groundCheckRadius, groundLayers, QueryTriggerInteraction.Ignore);
+        isGrounded = Physics.CheckSphere(transform.position + -transform.up * groundCheckDistance, groundCheckRadius, groundLayers, QueryTriggerInteraction.Ignore);
     }
 
     private void UpdateGroundedFrames()
@@ -245,7 +245,7 @@ public class SkatingController : MonoBehaviour
     private bool SnapToGround()
     {
         // Don't try to snap if off ground for more than 1 frame
-        if (framesSinceGrounded > 1 || framesSinceJump <= 2)
+        if (framesSinceGrounded > 1 || framesSinceJump <= 4)
         {
             return false;
         }
@@ -279,7 +279,7 @@ public class SkatingController : MonoBehaviour
 
         if (rigidBody.velocity.magnitude < 0.1f) { return; }
 
-        if (!isGrounded || framesSinceJump < 2) { return; }
+        if (!isGrounded || framesSinceJump < 4) { return; }
 
         Vector3 forwardVec = transform.forward.normalized;
         Vector3 velocity = rigidBody.velocity;
@@ -308,7 +308,7 @@ public class SkatingController : MonoBehaviour
 
         Gizmos.color = (isGrounded) ? Color.green : Color.red;
 
-        Gizmos.DrawWireSphere(transform.position + Vector3.down * groundCheckDistance, groundCheckRadius);
+        Gizmos.DrawWireSphere(transform.position + -transform.up * groundCheckDistance, groundCheckRadius);
 
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(transform.position, transform.position + contactNormal * 2.0f);
