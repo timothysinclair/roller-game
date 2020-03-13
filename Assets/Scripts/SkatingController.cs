@@ -15,9 +15,10 @@ public class SkatingController : MonoBehaviour
     // Only counts horizontal speed
     public float maxSpeed = 20.0f;
     public float steeringSensitivity = 1.0f;
-    private const float driftTurningSpeed = 5.0f;
+    public float driftTurningSpeed = 5.0f;
     [Range(0.0f, 1.0f)] public float airAcceleration = 0.0f;
     [Range(0.0f, 1.0f)] public float steerHelper = 0.5f;
+    [Range(0.0f, 1.0f)] public float driftSteerHelper = 0.5f;
 
     [Header("Fuck you")]
     public float movingDrag = 0.5f;
@@ -119,9 +120,10 @@ public class SkatingController : MonoBehaviour
         accelInput = Mathf.Clamp(accelInput, 0.0f, 1.0f);
 
         float accelMultiplier = (isGrounded) ? 1.0f : airAcceleration;
+        // float anotherAccelMultiplier = (drifting) ? 0.3f : 1.0f;
 
         // Add force to player
-        Vector3 moveVector = accelInput * moveForce * Time.fixedDeltaTime * transform.forward * accelMultiplier;
+        Vector3 moveVector = accelInput * moveForce * Time.fixedDeltaTime * transform.forward * accelMultiplier;// * anotherAccelMultiplier;
         rigidBody.AddForce(moveVector, ForceMode.Impulse);
 
         // Rotate player
@@ -285,11 +287,14 @@ public class SkatingController : MonoBehaviour
         Vector3 velocity = rigidBody.velocity;
 
         float dot = Vector3.Dot(forwardVec, velocity.normalized);
+        float helper = (drifting) ? steerHelper : driftSteerHelper;
+        float angleDiff = Mathf.Acos(dot) * helper;
 
         if (Mathf.Abs(dot) > 0.5f)
         {
             if (dot < 0.0f) { forwardVec = -transform.forward; }
-            Vector3 newVelocity = Vector3.RotateTowards(velocity, forwardVec, 99999.0f, 9999999.0f);
+
+            Vector3 newVelocity = Vector3.RotateTowards(velocity, forwardVec, angleDiff, 9999999.0f);
             newVelocity = newVelocity.normalized * velocity.magnitude;
 
             rigidBody.velocity = newVelocity;
