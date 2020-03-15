@@ -91,7 +91,7 @@ MonoBehaviour:
     value: 0
   mixerRedOutRedIn:
     overrideState: 1
-    value: 17
+    value: 91
   mixerRedOutGreenIn:
     overrideState: 0
     value: -200
@@ -102,20 +102,20 @@ MonoBehaviour:
     overrideState: 0
     value: -200
   mixerGreenOutGreenIn:
-    overrideState: 0
-    value: 127
+    overrideState: 1
+    value: 80
   mixerGreenOutBlueIn:
-    overrideState: 0
-    value: 200
+    overrideState: 1
+    value: 16
   mixerBlueOutRedIn:
     overrideState: 0
     value: 0
   mixerBlueOutGreenIn:
     overrideState: 0
-    value: 0
+    value: -39
   mixerBlueOutBlueIn:
     overrideState: 1
-    value: 200
+    value: 105
   lift:
     overrideState: 0
     value: {x: 1, y: 1, z: 1, w: 0}

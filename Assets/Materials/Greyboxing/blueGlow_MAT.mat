@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: blueFlow_MAT
+  m_Name: blueGlow_MAT
   m_Shader: {fileID: 4800000, guid: 73198e0d201b8cb479d3a0a5389f5dc9, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
