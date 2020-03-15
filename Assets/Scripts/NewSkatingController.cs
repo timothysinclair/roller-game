@@ -8,6 +8,8 @@ public class NewSkatingController : MonoBehaviour
     // PUBLIC //
     [Header("References")]
     public PlayerAnimations playerAnimations;
+    public GameObject leftBooster;
+    public GameObject rightBooster;
 
     [Header("Movement Variables")]
 
@@ -112,7 +114,18 @@ public class NewSkatingController : MonoBehaviour
         accelInput = Mathf.Clamp(accelInput, 0.0f, 1.0f);
 
         playerAnimations.drifting = drifting;
+        
         if (Mathf.Abs(steering) > 0.1f) { playerAnimations.driftIsRight = (steering >= 0.0f); }
+        if (accelInput > 0.4f && isGrounded)
+        {
+            leftBooster.SetActive(true);
+            rightBooster.SetActive(true);
+        }
+        else
+        {
+            leftBooster.SetActive(false);
+            rightBooster.SetActive(false);
+        }
 
         playerAnimations.accelerating = (accelInput > 0.4f) ? true : false;
 

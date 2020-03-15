@@ -1,0 +1,46 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GrindRail : MonoBehaviour
+{
+    // Place grindrail transform at rail start
+    public Transform railEnd;
+    public Transform distanceTester;
+
+    public float grindRange = 10.0f;
+
+
+    private Vector3 ClosestPointOnRail(Vector3 queryPosition)
+    {
+        Vector3 wander = queryPosition - transform.position;
+        Vector3 span = railEnd.position - transform.position;
+
+        float t = Vector3.Dot(wander, span) / span.sqrMagnitude;
+
+        t = Mathf.Clamp01(t);
+
+        Vector3 closestPoint = transform.position + t * span;
+
+        return closestPoint;
+    }
+
+    public bool CanGrind(Vector3 queryPosition)
+    {
+        Vector3 closestPos = ClosestPointOnRail(queryPosition);
+
+        float distance = (closestPos - queryPosition).magnitude;
+
+        // Player must be within range and above rail to grind
+        return (distance < grindRange && queryPosition.y > closestPos.y);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Debug.Log(CanGrind(distanceTester.position));
+
+        Gizmos.color = Color.cyan;
+
+        Gizmos.DrawLine(transform.position, railEnd.position);
+    }
+}
