@@ -284,12 +284,16 @@ public class NewSkatingController : MonoBehaviour
     // Called on collision enter and stay
     private void EvaluateCollision(Collision collision)
     {
+        Vector3 sumOfNormals = Vector3.zero;
+
         for (int i = 0; i < collision.contactCount; i++)
         {
-            Vector3 normal = collision.GetContact(i).normal.normalized;
+            sumOfNormals += collision.GetContact(i).normal.normalized;
 
-            contactNormal = normal;
+            // contactNormal = normal;
         }
+
+        contactNormal = sumOfNormals.normalized;
     }
     private bool SnapToGround()
     {
