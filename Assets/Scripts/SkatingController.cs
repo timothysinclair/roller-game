@@ -119,6 +119,8 @@ public class SkatingController : MonoBehaviour
         steering = Mathf.Clamp(steering, -1.0f, 1.0f);
         accelInput = Mathf.Clamp(accelInput, 0.0f, 1.0f);
 
+        
+
         float accelMultiplier = (isGrounded) ? 1.0f : airAcceleration;
         // float anotherAccelMultiplier = (drifting) ? 0.3f : 1.0f;
 
@@ -133,6 +135,8 @@ public class SkatingController : MonoBehaviour
         SteerHelper();
         ApplyDrag(accelInput > 0.01f);
         CapSpeed();
+
+        
     }
 
     private void ApplyDrag(bool accelInput)
@@ -176,6 +180,7 @@ public class SkatingController : MonoBehaviour
         // If on the ground, or just left the ground, jump
         if (isGrounded || CanLenientJump())
         {
+            
             // HEY // Might need to change this later to use the surface normal rather than just up
             rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             framesSinceJump = 0;
@@ -185,6 +190,7 @@ public class SkatingController : MonoBehaviour
     private void CheckGrounded()
     {
         isGrounded = Physics.CheckSphere(transform.position + -transform.up * groundCheckDistance, groundCheckRadius, groundLayers, QueryTriggerInteraction.Ignore);
+        
     }
 
     private void UpdateGroundedFrames()

@@ -6,7 +6,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerInput : MonoBehaviour
 {
-    private SkatingController controller;
+    private NewSkatingController controller;
+    private Rigidbody rigidBody;
 
     // Input
     private InputMaster controls;
@@ -16,7 +17,7 @@ public class PlayerInput : MonoBehaviour
 
     private void Awake()
     {
-        controller = GetComponent<SkatingController>();
+        controller = GetComponent<NewSkatingController>();
 
         // Input setup
         controls = new InputMaster();
@@ -31,8 +32,9 @@ public class PlayerInput : MonoBehaviour
         controls.Player.DriftPress.performed += _ => controller.drifting = true;
         controls.Player.DriftRelease.performed += _ => controller.drifting = false;
 
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+
     }
 
     private void FixedUpdate()
