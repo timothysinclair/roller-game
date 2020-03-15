@@ -111,6 +111,9 @@ public class NewSkatingController : MonoBehaviour
         steering = Mathf.Clamp(steering, -1.0f, 1.0f);
         accelInput = Mathf.Clamp(accelInput, 0.0f, 1.0f);
 
+        playerAnimations.drifting = drifting;
+        if (Mathf.Abs(steering) > 0.1f) { playerAnimations.driftIsRight = (steering >= 0.0f); }
+
         playerAnimations.accelerating = (accelInput > 0.4f) ? true : false;
 
         float accelMultiplier = (isGrounded) ? 1.0f : airAcceleration;
