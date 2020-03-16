@@ -35,6 +35,7 @@ public class PlayerInput : MonoBehaviour
         controls.Player.BrakeRelease.performed += _ => movementController.braking = false;
         controls.Player.DriftPress.performed += _ => movementController.drifting = true;
         controls.Player.DriftRelease.performed += _ => movementController.drifting = false;
+        controls.Player.Grind.performed += _ => { movementController.TryGrind(); };
 
         // Combat
         controls.Player.Attack.performed += _ => combatController.BasicAttack();
