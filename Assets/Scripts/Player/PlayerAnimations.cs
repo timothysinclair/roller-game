@@ -10,6 +10,7 @@ public class PlayerAnimations : MonoBehaviour
     [HideInInspector] public bool drifting = false;
     [HideInInspector] public bool driftIsRight = false;
 
+    [SerializeField] PlayerCombatController combatController;
     private Animator playerAnimator;
 
     private void Awake()
@@ -29,5 +30,10 @@ public class PlayerAnimations : MonoBehaviour
     public void OnJump()
     {
         playerAnimator.SetTrigger("Jump");
+    }
+
+    public void AEKickFinished()
+    {
+        combatController.AttackFinished();
     }
 }
