@@ -12,8 +12,6 @@ public class PlayerCombatController : MonoBehaviour
     [SerializeField] GameObject hurtbox;
 
     // Private
-    const float trickLength = 0.5f;
-    float trickTimer;
     bool trickPlaying = false;
     enum AttackState
     {
@@ -23,46 +21,39 @@ public class PlayerCombatController : MonoBehaviour
         THIRD
     }
     AttackState currentAttackState = AttackState.NONE;
+    NewSkatingController movementController;
 
     [Header("Attack Combo Times")]
     [Tooltip("Maximum time before the combo resets")]
-    [SerializeField] float maxAttackTime = 1.0f;
+    [SerializeField] float maxAttackTime = 0.5f;
     [Tooltip("Minimum time before a new combo can be triggered")]
-    [SerializeField] float minPostAttackTime = 1.5f;
+    [SerializeField] float minPostAttackTime = 1.0f;
     float timeSinceLastAttack = 10.0f;
 
 
     private void Awake()
     {
-        trickTimer = trickLength;
+        movementController = GetComponent<NewSkatingController>();
     }
 
     private void Update()
     {
+        if (trickPlaying && movementController.IsPlayerGrounded()) { trickPlaying = false; }
+
         // Combo timer
         if (timeSinceLastAttack <= 10.0f) { timeSinceLastAttack += Time.deltaTime; }
-
-        // Temp trick animation
-        if (trickPlaying && trickTimer <= 0.0f)
-        {
-            trickTimer = trickLength;
-            trickPlaying = false;
-            playerAnimator.SetBool("Attacking", false);
-            hurtbox.SetActive(false);
-        }
-        else if (trickPlaying) { trickTimer -= Time.deltaTime; }
     }
 
     public void BasicAttack()
     {
         // Checks if attacking
-        if (trickPlaying) { return; }
+        if (trickPlaying || movementController.IsPlayerGrounded()) { return; }
 
         if (currentAttackState == AttackState.NONE) { DoAttack(); }
         else
         {
             if (timeSinceLastAttack >= minPostAttackTime) { DoAttack(true); }
-            else if (timeSinceLastAttack < maxAttackTime && currentAttackState != AttackState.THIRD) { DoAttack(); }
+            else if (timeSinceLastAttack <= maxAttackTime && currentAttackState != AttackState.THIRD) { DoAttack(); }
         }
     }
 
@@ -70,12 +61,20 @@ public class PlayerCombatController : MonoBehaviour
     {
         currentAttackState = (resetAttackChain) ? AttackState.FIRST : (AttackState)(int)currentAttackState + 1;
 
-        timeSinceLastAttack = 0.0f;
+        //timeSinceLastAttack = 0.0f;
 
-        playerAnimator.SetBool("Attacking", true);
+        playerAnimator.SetInteger("KickState", (int)currentAttackState);
+        playerAnimator.SetTrigger("Attacking");
         trickPlaying = true;
-        hurtbox.SetActive(true);
+        //hurtbox.SetActive(true);
 
         Debug.Log("Attack " + currentAttackState);
+    }
+
+    public void AttackFinished()
+    {
+        trickPlaying = false;
+        hurtbox.SetActive(false);
+        timeSinceLastAttack = 0.0f;
     }
 }

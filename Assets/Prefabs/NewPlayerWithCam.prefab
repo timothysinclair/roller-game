@@ -9638,7 +9638,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1134467687018846987}
-  m_LocalRotation: {x: 0.15884234, y: 0.6969759, z: -0.16280568, w: 0.6800648}
+  m_LocalRotation: {x: 0.15884236, y: 0.6969759, z: -0.16280569, w: 0.6800648}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -10349,6 +10349,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: cae6107edfb63a645ad47ccd7f4390ff, type: 2}
+    - target: {fileID: 382083540811880450, guid: 149ff54467a58694eb0b3d7c759210d4,
+        type: 3}
+      propertyPath: combatController
+      value: 
+      objectReference: {fileID: 3581384295347812800}
     - target: {fileID: 393057958303060375, guid: 149ff54467a58694eb0b3d7c759210d4,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

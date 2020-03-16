@@ -386,6 +386,11 @@ public class NewSkatingController : MonoBehaviour
         groundedFrames[0] = isGrounded;
     }
 
+    public bool IsPlayerGrounded()
+    {
+        return isGrounded;
+    }
+
     private bool CanLenientJump()
     {
         bool lenientJump = false;
