@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 214541223ac8d4746bae8fcc216115c0, type: 3}
+  m_Name: PlayerSettings
+  m_EditorClassIdentifier: 
+  moveForce: 100
+  jumpForce: 20
+  turningForce: 350
+  driftTurningForce: 600
+  brakingMultiplier: 1
+  maxSpeed: 50
+  airAcceleration: 0
+  steerHelper: 0.108
+  forwardFriction:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.015477943
+      outSlope: 0.015477943
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.1353559
+    - serializedVersion: 3
+      time: 20
+      value: 0.25
+      inSlope: 0.00012488889
+      outSlope: 0.00012488889
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.1318554
+    - serializedVersion: 3
+      time: 40
+      value: 0.125
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  sidewaysFriction:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.106693715
+      outSlope: 0.106693715
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.03296255
+    - serializedVersion: 3
+      time: 12
+      value: 1
+      inSlope: -0.00025927878
+      outSlope: -0.00025927878
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.14235711
+    - serializedVersion: 3
+      time: 20
+      value: 0.75
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  normalGravity: 40
+  jumpingGravity: 15
+  extraJumpFrames: 10
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 55
+  groundCheckDistance: 1
+  groundCheckRadius: 0.3
+  groundSnapDistance: 1
+  maxSnapSpeed: 5

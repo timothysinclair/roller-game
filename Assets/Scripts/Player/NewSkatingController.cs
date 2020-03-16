@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 [RequireComponent(typeof(Rigidbody))]
 public class NewSkatingController : MonoBehaviour
@@ -65,8 +66,11 @@ public class NewSkatingController : MonoBehaviour
     private List<bool> groundedFrames;
     private List<GrindRail> grindRails;
 
+    private PlayerSettings playerSettings;
+
     private void Awake()
     {
+        playerSettings = Resources.Load<PlayerSettings>("ScriptableObjects/PlayerSettings");
         rigidBody = GetComponent<Rigidbody>();
 
         groundedFrames = new List<bool>(extraJumpFrames);
@@ -149,7 +153,7 @@ public class NewSkatingController : MonoBehaviour
         float accelMultiplier = (isGrounded) ? 1.0f : airAcceleration;
 
         // Add force to player
-        Vector3 moveVector = accelInput * moveForce * Time.fixedDeltaTime * transform.forward * accelMultiplier;
+        Vector3 moveVector = accelInput * playerSettings.moveForce * Time.fixedDeltaTime * transform.forward * accelMultiplier;
         rigidBody.AddForce(moveVector, ForceMode.Impulse);
 
         // Add braking force to player
