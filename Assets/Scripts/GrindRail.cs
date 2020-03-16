@@ -6,12 +6,11 @@ public class GrindRail : MonoBehaviour
 {
     // Place grindrail transform at rail start
     public Transform railEnd;
-    public Transform distanceTester;
+    // public Transform distanceTester;
 
     public float grindRange = 10.0f;
 
-
-    private Vector3 ClosestPointOnRail(Vector3 queryPosition)
+    public Vector3 ClosestPointOnRail(Vector3 queryPosition)
     {
         Vector3 wander = queryPosition - transform.position;
         Vector3 span = railEnd.position - transform.position;
@@ -32,14 +31,21 @@ public class GrindRail : MonoBehaviour
         float distance = (closestPos - queryPosition).magnitude;
 
         // Player must be within range and above rail to grind
-        return (distance < grindRange && queryPosition.y > closestPos.y);
+        return (distance < grindRange && (queryPosition.y - closestPos.y) > -5.0f);
+    }
+
+    public Vector3 GetForward()
+    {
+        return (railEnd.position - transform.position).normalized;
     }
 
     private void OnDrawGizmos()
     {
-        Debug.Log(CanGrind(distanceTester.position));
+        // Debug.Log(CanGrind(distanceTester.position));
 
         Gizmos.color = Color.cyan;
+        // Gizmos.DrawWireSphere(transform.position, grindRange);
+        // Gizmos.DrawWireSphere(railEnd.transform.position, grindRange);
 
         Gizmos.DrawLine(transform.position, railEnd.position);
     }

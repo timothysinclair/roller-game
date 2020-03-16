@@ -47,6 +47,7 @@ public class NewSkatingController : MonoBehaviour
 
     [HideInInspector] public bool braking = false;
     [HideInInspector] public bool drifting = false;
+    private bool grinding = false;
 
     // PRIVATE //
 
@@ -59,8 +60,10 @@ public class NewSkatingController : MonoBehaviour
     private float currentFriction = 0.0f;
     private const float frictionCoefficient = 3.0f;
     private float currentTurningForce = 0.0f;
+    private GrindRail grindingRail = null;
 
     private List<bool> groundedFrames;
+    private List<GrindRail> grindRails;
 
     private void Awake()
     {
@@ -71,6 +74,14 @@ public class NewSkatingController : MonoBehaviour
         {
             groundedFrames.Add(true);
         }
+        
+        GrindRail[] rails = FindObjectsOfType<GrindRail>();
+        grindRails = new List<GrindRail>();
+
+        for (int i = 0; i < rails.Length; i++)
+        {
+            grindRails.Add(rails[i]);
+        }
     }
 
     private void FixedUpdate()
@@ -78,7 +89,9 @@ public class NewSkatingController : MonoBehaviour
         framesSinceGrounded += 1;
         framesSinceJump += 1;
 
+        if (grinding) { return; }
         // Decided gravity value
+
         float gravityValue = (jumpInput) ? jumpingGravity : normalGravity;
 
         // Apply gravity
@@ -109,6 +122,10 @@ public class NewSkatingController : MonoBehaviour
 
     public void Move(float steering, float accelInput)
     {
+        GrindUpdate();
+
+        if (grinding) { return; }
+
         // Normalise steering and acceleration inputs
         steering = Mathf.Clamp(steering, -1.0f, 1.0f);
         accelInput = Mathf.Clamp(accelInput, 0.0f, 1.0f);
@@ -169,6 +186,107 @@ public class NewSkatingController : MonoBehaviour
             skaterSpeed.y = verticalSpeed;
             rigidBody.velocity = skaterSpeed;
         }
+    }
+
+    public bool TryGrind()
+    {
+        if (grindRails.Count <= 0) { return false; }
+
+        GrindRail closest = FindClosestRail();
+
+        Debug.Assert(closest, "ERROR: Couldn't find a closest grind rail");
+
+        if (closest.CanGrind(transform.position))
+        {
+            StartGrind(closest);
+            return true;
+            // Debug.Log("Started grind with " + closest.name);
+        }
+
+        return false;
+    }
+
+    private GrindRail FindClosestRail()
+    {
+        GrindRail closest = null;
+        float closestDist = 999999.0f;
+
+        for (int i = 0; i < grindRails.Count; i++)
+        {
+            GrindRail testRail = grindRails[i];
+            if (testRail == grindingRail) { continue; }
+
+            float dist = (testRail.ClosestPointOnRail(transform.position) - transform.position).magnitude;
+
+            if (dist < closestDist)
+            {
+                closest = testRail;
+                closestDist = dist;
+            }
+        }
+
+        return closest;
+    }
+
+    private void StartGrind(GrindRail rail)
+    {
+        Debug.Log("Started grind");
+        grinding = true;
+        grindingRail = rail;
+
+        // Snap player to rail
+        transform.position = grindingRail.ClosestPointOnRail(transform.position);
+    }
+
+    private void GrindUpdate()
+    {
+        if (!grinding) { return; }
+
+        // Check if fallen off end of rail
+        if ((grindingRail.ClosestPointOnRail(transform.position) - transform.position).magnitude > 1.0f)
+        {
+            // Try to find another rail to snap to
+
+            GrindRail closest = FindClosestRail();
+
+            float closestDot = Vector3.Dot(closest.GetForward(), rigidBody.velocity.normalized);
+
+            if (Mathf.Abs(closestDot) > 0.75f && closest.CanGrind(transform.position))
+            {
+                StopGrind();
+                StartGrind(closest);
+            }
+            else
+            {
+                StopGrind();
+            }
+
+            return;
+        }
+
+        // If not, align player velocity with rail
+        Vector3 playerVelocity = rigidBody.velocity;
+        Vector3 railDir = grindingRail.GetForward();
+
+        float dot = Vector3.Dot(playerVelocity.normalized, railDir);
+
+        // Player should go forward on the rail
+        if (dot >= 0.0f)
+        {
+            rigidBody.velocity = rigidBody.velocity.magnitude * railDir;
+        }
+        else
+        {
+            rigidBody.velocity = rigidBody.velocity.magnitude * -railDir;
+        }
+    }
+
+    private void StopGrind()
+    {
+        Debug.Log("Stopped Grind");
+
+        grinding = false;
+        grindingRail = null;
     }
 
     private void DetermineFriction()
@@ -242,12 +360,15 @@ public class NewSkatingController : MonoBehaviour
             // HEY // Might need to change this later to use the surface normal rather than just up
             rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             framesSinceJump = 0;
+
+            if (grinding) { StopGrind(); }
         }
     }
 
     private void CheckGrounded()
     {
         isGrounded = Physics.CheckSphere(transform.position + -transform.up * groundCheckDistance, groundCheckRadius, groundLayers, QueryTriggerInteraction.Ignore);
+        if (grinding) { isGrounded = true; }
         playerAnimations.grounded = isGrounded;
     }
 
