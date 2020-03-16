@@ -209,10 +209,29 @@ public class NewSkatingController : MonoBehaviour
         grindingRail = rail;
         if (playSound) { AudioManager.Instance.PlaySoundVaried("GrindStart"); }
         grindLoop.SetActive(true);
+        playerAnimations.grinding = true;
 
         // Snap player to rail
         transform.position = grindingRail.ClosestPointOnRail(transform.position);
-    }
+
+        Vector3 playerDir = transform.forward;
+        Vector3 railDir = grindingRail.GetForward();
+
+        float dot = Vector3.Dot(playerDir, railDir);
+
+        rigidBody.angularVelocity = Vector3.zero;
+
+        // Player should go forward on the rail
+        if (dot >= 0.0f)
+        {
+            transform.rotation = Quaternion.LookRotation(railDir, grindingRail.GetNormal());
+        }
+        else
+        {
+            transform.rotation = Quaternion.LookRotation(-railDir, grindingRail.GetNormal());
+        }
+            // transform.rotation = Quaternion.LookRotation()
+        }
 
     private void GrindUpdate()
     {
@@ -263,6 +282,7 @@ public class NewSkatingController : MonoBehaviour
 
         if (playSound) { AudioManager.Instance.PlaySoundVaried("GrindEnd"); }
         grindLoop.SetActive(false);
+        playerAnimations.grinding = false;
 
         grinding = false;
         grindingRail = null;

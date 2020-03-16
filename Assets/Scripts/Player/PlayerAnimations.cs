@@ -9,6 +9,7 @@ public class PlayerAnimations : MonoBehaviour
     [HideInInspector] public bool accelerating = false;
     [HideInInspector] public bool drifting = false;
     [HideInInspector] public bool driftIsRight = false;
+    [HideInInspector] public bool grinding = false;
 
     [SerializeField] PlayerCombatController combatController;
     private Animator playerAnimator;
@@ -25,6 +26,7 @@ public class PlayerAnimations : MonoBehaviour
         playerAnimator.SetBool("Accelerating", accelerating);
         playerAnimator.SetBool("Drifting", drifting);
         playerAnimator.SetBool("DriftIsRight", driftIsRight);
+        playerAnimator.SetBool("Grinding", grinding);
     }
 
     public void OnJump()

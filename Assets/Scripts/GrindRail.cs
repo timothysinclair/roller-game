@@ -6,9 +6,17 @@ public class GrindRail : MonoBehaviour
 {
     // Place grindrail transform at rail start
     public Transform railEnd;
+    public Transform normalTransform;
     // public Transform distanceTester;
 
     public float grindRange = 10.0f;
+
+    private Vector3 normal = Vector3.up;
+
+    private void Awake()
+    {
+        normal = (normalTransform.position - transform.position).normalized;
+    }
 
     public Vector3 ClosestPointOnRail(Vector3 queryPosition)
     {
@@ -39,14 +47,23 @@ public class GrindRail : MonoBehaviour
         return (railEnd.position - transform.position).normalized;
     }
 
+    public Vector3 GetNormal()
+    {
+        return normal;
+    }
+
     private void OnDrawGizmos()
     {
         // Debug.Log(CanGrind(distanceTester.position));
+        
 
         Gizmos.color = Color.cyan;
         // Gizmos.DrawWireSphere(transform.position, grindRange);
         // Gizmos.DrawWireSphere(railEnd.transform.position, grindRange);
 
         Gizmos.DrawLine(transform.position, railEnd.position);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, transform.position + GetNormal());
     }
 }
