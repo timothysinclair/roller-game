@@ -9,7 +9,8 @@ public class PlayerCombatController : MonoBehaviour
 
     // Serialiszed
     [SerializeField] Animator playerAnimator;
-    [SerializeField] GameObject hurtbox;
+    [SerializeField] GameObject kickHurtbox;
+    [SerializeField] GameObject jumpHurtbox;
 
     // Private
     bool trickPlaying = false;
@@ -22,6 +23,11 @@ public class PlayerCombatController : MonoBehaviour
     }
     AttackState currentAttackState = AttackState.NONE;
     NewSkatingController movementController;
+
+    // Jump attack
+    float jumpHurtboxTimer = 0.0f;
+    const float maxJumpHurtBoxTimer = 0.1f;
+    bool jumpAttackActive = false;
 
     [Header("Attack Combo Times")]
     [Tooltip("Maximum time before the combo resets")]
@@ -42,6 +48,10 @@ public class PlayerCombatController : MonoBehaviour
 
         // Combo timer
         if (timeSinceLastAttack <= 10.0f) { timeSinceLastAttack += Time.deltaTime; }
+
+        // Jump hurt box
+        if (jumpHurtboxTimer <= 0.0f && jumpAttackActive) { StopJumpAttack(); }
+        else if (jumpAttackActive) { jumpHurtboxTimer -= Time.deltaTime; }
     }
 
     public void BasicAttack()
@@ -66,15 +76,25 @@ public class PlayerCombatController : MonoBehaviour
         playerAnimator.SetInteger("KickState", (int)currentAttackState);
         playerAnimator.SetTrigger("Attacking");
         trickPlaying = true;
-        //hurtbox.SetActive(true);
-
-        Debug.Log("Attack " + currentAttackState);
+        kickHurtbox.SetActive(true);
     }
 
     public void AttackFinished()
     {
         trickPlaying = false;
-        hurtbox.SetActive(false);
+        kickHurtbox.SetActive(false);
         timeSinceLastAttack = 0.0f;
+    }
+
+    public void JumpAttack()
+    {
+        jumpHurtbox.SetActive(true);
+        jumpHurtboxTimer = maxJumpHurtBoxTimer;
+        jumpAttackActive = true;
+    }
+
+    public void StopJumpAttack()
+    {
+        jumpAttackActive = false;
     }
 }
