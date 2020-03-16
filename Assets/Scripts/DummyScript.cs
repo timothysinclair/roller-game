@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class DummyScript : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.collider.tag == "HurtBox")
+        if (other.tag == "HurtBox")
         {
-
+            // Take damage
+            Debug.Log("Dummy Hit");
         }
     }
 }
