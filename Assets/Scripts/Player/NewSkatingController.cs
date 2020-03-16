@@ -17,6 +17,7 @@ public class NewSkatingController : MonoBehaviour
     [HideInInspector] public bool braking = false;
     [HideInInspector] public bool drifting = false;
     private bool grinding = false;
+    public bool useJumpAttackGravity = false;
 
     // PRIVATE //
 
@@ -64,7 +65,8 @@ public class NewSkatingController : MonoBehaviour
         if (grinding) { return; }
         // Decided gravity value
 
-        float gravityValue = (jumpInput) ? playerSettings.jumpingGravity : playerSettings.normalGravity;
+        // If doing a jump attack use that gravity : else if holding jump use that gravity : else use normal gravity
+        float gravityValue = (useJumpAttackGravity) ? playerSettings.jumpAttackGravity : (jumpInput) ? playerSettings.jumpingGravity : playerSettings.normalGravity;
 
         // Apply gravity
         rigidBody.AddForce(Vector3.down * gravityValue * Time.fixedDeltaTime, ForceMode.Impulse);
@@ -354,6 +356,8 @@ public class NewSkatingController : MonoBehaviour
     {
         if (isGrounded || CanLenientJump())
         {
+            GetComponent<PlayerCombatController>().SpawnJumpHurtbox();
+
             playerAnimations.OnJump();
 
             // HEY // Might need to change this later to use the surface normal rather than just up

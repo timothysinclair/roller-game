@@ -23,12 +23,12 @@ public class PlayerSettings : ScriptableObject
 
     [Header("Gravity/Jumping Variables")]
     public float normalGravity = 40.0f;
-
     [Tooltip("Applied while the player is holding the jump button")]
     public float jumpingGravity = 15.0f;
-
     [Tooltip("How many frames the player can still jump for if they fall off an edge")]
     public int extraJumpFrames = 10;
+    [Tooltip("Gravity used when attacking in the air")]
+    public float jumpAttackGravity = 1.0f;
 
     [Header("Ground Checking")]
     public LayerMask groundLayers = -1;
@@ -38,4 +38,16 @@ public class PlayerSettings : ScriptableObject
     [Header("Ground Snapping")]
     public float groundSnapDistance = 1.0f;
     public float maxSnapSpeed = 5.0f;
+
+    [Header("Attack Combo Times")]
+    [Tooltip("Maximum time before the combo resets")]
+    public float maxAttackTime = 0.5f;
+    [Tooltip("Minimum time before a new combo can be triggered")]
+    public float minPostAttackTime = 1.0f;
+
+    [Header("Jump Attack")]
+    [Tooltip("Time that jump hurt box will be active")]
+    public float maxJumpHurtBoxTimer = 0.1f;
+    [Tooltip("Maximum time the player has to hit the enemy once in the air")]
+    public float maxTimeToHit = 1.0f;
 }
