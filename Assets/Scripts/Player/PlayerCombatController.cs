@@ -35,9 +35,11 @@ public class PlayerCombatController : MonoBehaviour
     float timeSinceLastAttack = 10.0f;
 
     PlayerSettings playerSettings;
+    Rigidbody _rigidBody;
 
     private void Awake()
     {
+        _rigidBody = GetComponent<Rigidbody>();
         playerSettings = Resources.Load<PlayerSettings>("ScriptableObjects/PlayerSettings");
         movementController = GetComponent<NewSkatingController>();
     }
@@ -115,8 +117,8 @@ public class PlayerCombatController : MonoBehaviour
         enemyHit.GetComponent<DummyScript>().useJumpAttackGrav = true;
 
         // Player
-        GetComponent<Rigidbody>().velocity = Vector3.zero;
-        GetComponent<Rigidbody>().AddForce(Vector3.up * playerSettings.jumpForce, ForceMode.Impulse);
+        _rigidBody.velocity = Vector3.zero;
+        _rigidBody.AddForce(Vector3.up * playerSettings.jumpForce, ForceMode.Impulse);
 
         // Variables
         jumpAttackTimer = 0.0f;

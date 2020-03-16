@@ -65,8 +65,17 @@ public class NewSkatingController : MonoBehaviour
         if (grinding) { return; }
         // Decided gravity value
 
-        // If doing a jump attack use that gravity : else if holding jump use that gravity : else use normal gravity
-        float gravityValue = (useJumpAttackGravity) ? playerSettings.jumpAttackGravity : (jumpInput) ? playerSettings.jumpingGravity : playerSettings.normalGravity;
+        float gravityValue = 0.0f;
+        if (useJumpAttackGravity)
+        {
+            // Reset velocity
+            rigidBody.velocity = Vector3.up * rigidBody.velocity.y;
+            gravityValue = playerSettings.jumpAttackGravity;
+        }
+        else
+        {
+            gravityValue = (jumpInput) ? playerSettings.jumpingGravity : playerSettings.normalGravity;
+        }
 
         // Apply gravity
         rigidBody.AddForce(Vector3.down * gravityValue * Time.fixedDeltaTime, ForceMode.Impulse);
@@ -80,7 +89,7 @@ public class NewSkatingController : MonoBehaviour
             // contactNormal = Vector3.up;
         }
 
-        SurfaceAlignment();
+        if (!useJumpAttackGravity) { SurfaceAlignment(); }
     }
 
     private void Update()
