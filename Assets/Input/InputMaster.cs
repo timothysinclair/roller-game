@@ -89,6 +89,22 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""bbbb003e-da35-4d79-8a4a-dfe54f121f0a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""Grind"",
+                    ""type"": ""Button"",
+                    ""id"": ""abbe21cd-5352-456f-9c08-ec8372199ac9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
@@ -333,6 +349,50 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""Steering"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""10f7b585-48a7-4211-9fc2-2b086ff415c3"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""03a76162-581e-492c-a9d6-51176ed9f83b"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6371aa61-bd9b-414b-a79b-706b7d4bb0ef"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Grind"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""28a79317-c560-4fff-97b7-c2258dc7196b"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Grind"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -344,6 +404,11 @@ public class @InputMaster : IInputActionCollection, IDisposable
             ""devices"": [
                 {
                     ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<Mouse>"",
                     ""isOptional"": false,
                     ""isOR"": false
                 }
@@ -373,6 +438,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Player_DriftPress = m_Player.FindAction("Drift Press", throwIfNotFound: true);
         m_Player_DriftRelease = m_Player.FindAction("Drift Release", throwIfNotFound: true);
         m_Player_Steering = m_Player.FindAction("Steering", throwIfNotFound: true);
+        m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
+        m_Player_Grind = m_Player.FindAction("Grind", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -431,6 +498,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_DriftPress;
     private readonly InputAction m_Player_DriftRelease;
     private readonly InputAction m_Player_Steering;
+    private readonly InputAction m_Player_Attack;
+    private readonly InputAction m_Player_Grind;
     public struct PlayerActions
     {
         private @InputMaster m_Wrapper;
@@ -444,6 +513,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @DriftPress => m_Wrapper.m_Player_DriftPress;
         public InputAction @DriftRelease => m_Wrapper.m_Player_DriftRelease;
         public InputAction @Steering => m_Wrapper.m_Player_Steering;
+        public InputAction @Attack => m_Wrapper.m_Player_Attack;
+        public InputAction @Grind => m_Wrapper.m_Player_Grind;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -480,6 +551,12 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Steering.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSteering;
                 @Steering.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSteering;
                 @Steering.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSteering;
+                @Attack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
+                @Attack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
+                @Attack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
+                @Grind.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrind;
+                @Grind.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrind;
+                @Grind.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrind;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -511,6 +588,12 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Steering.started += instance.OnSteering;
                 @Steering.performed += instance.OnSteering;
                 @Steering.canceled += instance.OnSteering;
+                @Attack.started += instance.OnAttack;
+                @Attack.performed += instance.OnAttack;
+                @Attack.canceled += instance.OnAttack;
+                @Grind.started += instance.OnGrind;
+                @Grind.performed += instance.OnGrind;
+                @Grind.canceled += instance.OnGrind;
             }
         }
     }
@@ -544,5 +627,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnDriftPress(InputAction.CallbackContext context);
         void OnDriftRelease(InputAction.CallbackContext context);
         void OnSteering(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
+        void OnGrind(InputAction.CallbackContext context);
     }
 }
