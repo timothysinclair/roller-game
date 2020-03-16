@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlayerSettings
   m_EditorClassIdentifier: 
   moveForce: 100
-  jumpForce: 20
+  jumpForce: 30
   turningForce: 350
   driftTurningForce: 600
   brakingMultiplier: 1
@@ -86,8 +86,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  normalGravity: 40
-  jumpingGravity: 15
+  normalGravity: 50
+  jumpingGravity: 35
   extraJumpFrames: 10
   groundLayers:
     serializedVersion: 2

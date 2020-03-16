@@ -11,6 +11,8 @@ public class NewSkatingController : MonoBehaviour
     public PlayerAnimations playerAnimations;
     public GameObject leftBooster;
     public GameObject rightBooster;
+    public GameObject grindLoop;
+    public GameObject thrusterLoop;
 
     [HideInInspector] public bool braking = false;
     [HideInInspector] public bool drifting = false;
@@ -107,11 +109,13 @@ public class NewSkatingController : MonoBehaviour
         {
             leftBooster.SetActive(true);
             rightBooster.SetActive(true);
+            thrusterLoop.SetActive(true);
         }
         else
         {
             leftBooster.SetActive(false);
             rightBooster.SetActive(false);
+            thrusterLoop.SetActive(false);
         }
 
         playerAnimations.accelerating = (accelInput > 0.4f) ? true : false;
@@ -168,7 +172,7 @@ public class NewSkatingController : MonoBehaviour
 
         if (closest.CanGrind(transform.position))
         {
-            StartGrind(closest);
+            StartGrind(closest, true);
             return true;
             // Debug.Log("Started grind with " + closest.name);
         }
@@ -198,11 +202,13 @@ public class NewSkatingController : MonoBehaviour
         return closest;
     }
 
-    private void StartGrind(GrindRail rail)
+    private void StartGrind(GrindRail rail, bool playSound)
     {
         Debug.Log("Started grind");
         grinding = true;
         grindingRail = rail;
+        if (playSound) { AudioManager.Instance.PlaySoundVaried("GrindStart"); }
+        grindLoop.SetActive(true);
 
         // Snap player to rail
         transform.position = grindingRail.ClosestPointOnRail(transform.position);
@@ -223,12 +229,12 @@ public class NewSkatingController : MonoBehaviour
 
             if (Mathf.Abs(closestDot) > 0.75f && closest.CanGrind(transform.position))
             {
-                StopGrind();
-                StartGrind(closest);
+                StopGrind(false);
+                StartGrind(closest, true);
             }
             else
             {
-                StopGrind();
+                StopGrind(true);
             }
 
             return;
@@ -251,9 +257,12 @@ public class NewSkatingController : MonoBehaviour
         }
     }
 
-    private void StopGrind()
+    private void StopGrind(bool playSound)
     {
         Debug.Log("Stopped Grind");
+
+        if (playSound) { AudioManager.Instance.PlaySoundVaried("GrindEnd"); }
+        grindLoop.SetActive(false);
 
         grinding = false;
         grindingRail = null;
@@ -331,7 +340,9 @@ public class NewSkatingController : MonoBehaviour
             rigidBody.AddForce(Vector3.up * playerSettings.jumpForce, ForceMode.Impulse);
             framesSinceJump = 0;
 
-            if (grinding) { StopGrind(); }
+            AudioManager.Instance.PlaySoundVaried("SkateJump");
+
+            if (grinding) { StopGrind(true); }
         }
     }
 
