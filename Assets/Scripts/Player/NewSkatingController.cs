@@ -12,40 +12,6 @@ public class NewSkatingController : MonoBehaviour
     public GameObject leftBooster;
     public GameObject rightBooster;
 
-    [Header("Movement Variables")]
-
-    [Tooltip("The amount of force applied to the skater every frame they are holding accelerate")]
-    public float moveForce = 1.0f;
-    public float jumpForce = 2.0f;
-    public float turningForce = 1.0f;
-    public float driftTurningForce = 1.0f;
-    public float brakingMultiplier = 1.0f;
-    public float maxSpeed = 20.0f;
-    [Range(0.0f, 1.0f)] public float airAcceleration = 0.0f;
-    [Range(0.0f, 1.0f)] public float steerHelper = 0.0f;
-
-    [Header("Friction Variables")]
-    public AnimationCurve forwardFriction;
-    public AnimationCurve sidewaysFriction;
-
-    [Header("Gravity/Jumping Variables")]
-    public float normalGravity = 40.0f;
-
-    [Tooltip("Applied while the player is holding the jump button")]
-    public float jumpingGravity = 15.0f;
-
-    [Tooltip("How many frames the player can still jump for if they fall off an edge")]
-    public int extraJumpFrames = 10;
-
-    [Header("Ground Checking")]
-    public LayerMask groundLayers = -1;
-    public float groundCheckDistance = 1.0f;
-    public float groundCheckRadius = 0.3f;
-
-    [Header("Ground Snapping")]
-    public float groundSnapDistance = 1.0f;
-    public float maxSnapSpeed = 5.0f;
-
     [HideInInspector] public bool braking = false;
     [HideInInspector] public bool drifting = false;
     private bool grinding = false;
@@ -73,8 +39,8 @@ public class NewSkatingController : MonoBehaviour
         playerSettings = Resources.Load<PlayerSettings>("ScriptableObjects/PlayerSettings");
         rigidBody = GetComponent<Rigidbody>();
 
-        groundedFrames = new List<bool>(extraJumpFrames);
-        for (int i = 0; i < extraJumpFrames; i++)
+        groundedFrames = new List<bool>(playerSettings.extraJumpFrames);
+        for (int i = 0; i < playerSettings.extraJumpFrames; i++)
         {
             groundedFrames.Add(true);
         }
@@ -96,7 +62,7 @@ public class NewSkatingController : MonoBehaviour
         if (grinding) { return; }
         // Decided gravity value
 
-        float gravityValue = (jumpInput) ? jumpingGravity : normalGravity;
+        float gravityValue = (jumpInput) ? playerSettings.jumpingGravity : playerSettings.normalGravity;
 
         // Apply gravity
         rigidBody.AddForce(Vector3.down * gravityValue * Time.fixedDeltaTime, ForceMode.Impulse);
@@ -150,7 +116,7 @@ public class NewSkatingController : MonoBehaviour
 
         playerAnimations.accelerating = (accelInput > 0.4f) ? true : false;
 
-        float accelMultiplier = (isGrounded) ? 1.0f : airAcceleration;
+        float accelMultiplier = (isGrounded) ? 1.0f : playerSettings.airAcceleration;
 
         // Add force to player
         Vector3 moveVector = accelInput * playerSettings.moveForce * Time.fixedDeltaTime * transform.forward * accelMultiplier;
@@ -159,11 +125,11 @@ public class NewSkatingController : MonoBehaviour
         // Add braking force to player
         if (braking && isGrounded)
         {
-            Vector3 brakeVector = -rigidBody.velocity * Time.fixedDeltaTime * brakingMultiplier;
+            Vector3 brakeVector = -rigidBody.velocity * Time.fixedDeltaTime * playerSettings.brakingMultiplier;
             rigidBody.AddForce(brakeVector, ForceMode.Impulse);
         }
 
-        currentTurningForce = (drifting) ? driftTurningForce : turningForce;
+        currentTurningForce = (drifting) ? playerSettings.driftTurningForce : playerSettings.turningForce;
 
         // Turn player
         Vector3 rotationTorque = steering * currentTurningForce * Time.fixedDeltaTime * Vector3.up;
@@ -184,9 +150,9 @@ public class NewSkatingController : MonoBehaviour
         skaterSpeed.y = 0.0f;
 
         // If speed over max, cap speed
-        if (skaterSpeed.magnitude > maxSpeed)
+        if (skaterSpeed.magnitude > playerSettings.maxSpeed)
         {
-            skaterSpeed = skaterSpeed.normalized * maxSpeed;
+            skaterSpeed = skaterSpeed.normalized * playerSettings.maxSpeed;
             skaterSpeed.y = verticalSpeed;
             rigidBody.velocity = skaterSpeed;
         }
@@ -301,8 +267,8 @@ public class NewSkatingController : MonoBehaviour
         float playerSpeed = rigidBody.velocity.magnitude;
         Vector3 projectedVelocity = ProjectedPlayerVelocity();
 
-        float forwardAmount = projectedVelocity.magnitude * forwardFriction.Evaluate(playerSpeed);
-        float sidewaysAmount = (1.0f - projectedVelocity.magnitude) * sidewaysFriction.Evaluate(playerSpeed);
+        float forwardAmount = projectedVelocity.magnitude * playerSettings.forwardFriction.Evaluate(playerSpeed);
+        float sidewaysAmount = (1.0f - projectedVelocity.magnitude) * playerSettings.sidewaysFriction.Evaluate(playerSpeed);
         // Debug.Log("Forward friction: " + projectedVelocity.magnitude + " Sideways friction: " + (1.0f - projectedVelocity.magnitude));
         currentFriction = forwardAmount + sidewaysAmount;
     }
@@ -338,7 +304,7 @@ public class NewSkatingController : MonoBehaviour
         Vector3 velocity = rigidBody.velocity;
 
         float dot = Vector3.Dot(forwardVec, velocity.normalized);
-        float angleDiff = Mathf.Acos(dot) * steerHelper;
+        float angleDiff = Mathf.Acos(dot) * playerSettings.steerHelper;
 
         if (drifting) { angleDiff *= 0.25f; }
 
@@ -362,7 +328,7 @@ public class NewSkatingController : MonoBehaviour
             playerAnimations.OnJump();
 
             // HEY // Might need to change this later to use the surface normal rather than just up
-            rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            rigidBody.AddForce(Vector3.up * playerSettings.jumpForce, ForceMode.Impulse);
             framesSinceJump = 0;
 
             if (grinding) { StopGrind(); }
@@ -371,7 +337,7 @@ public class NewSkatingController : MonoBehaviour
 
     private void CheckGrounded()
     {
-        isGrounded = Physics.CheckSphere(transform.position + -transform.up * groundCheckDistance, groundCheckRadius, groundLayers, QueryTriggerInteraction.Ignore);
+        isGrounded = Physics.CheckSphere(transform.position + -contactNormal * playerSettings.groundCheckDistance, playerSettings.groundCheckRadius, playerSettings.groundLayers, QueryTriggerInteraction.Ignore);
         if (grinding) { isGrounded = true; }
         playerAnimations.grounded = isGrounded;
     }
@@ -449,7 +415,7 @@ public class NewSkatingController : MonoBehaviour
         RaycastHit hit;
 
         // If ground isn't close to us, don't try to snap
-        if (!Physics.Raycast(transform.position, -contactNormal, out hit, groundSnapDistance, groundLayers))
+        if (!Physics.Raycast(transform.position, -contactNormal, out hit, playerSettings.groundSnapDistance, playerSettings.groundLayers))
         {
             return false;
         }
@@ -457,7 +423,7 @@ public class NewSkatingController : MonoBehaviour
         contactNormal = hit.normal;
         Vector3 currentVelocity = rigidBody.velocity;
         float speed = currentVelocity.magnitude;
-        if (speed > maxSnapSpeed) { return false; }
+        if (speed > playerSettings.maxSnapSpeed) { return false; }
 
         float dot = Vector3.Dot(currentVelocity, hit.normal);
         if (dot > 0.0f)
@@ -471,17 +437,17 @@ public class NewSkatingController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        // if (!Application.isPlaying) { return; }
+        if (!Application.isPlaying) { return; }
 
         Gizmos.color = (isGrounded) ? Color.green : Color.red;
 
-        Gizmos.DrawWireSphere(transform.position + -transform.up * groundCheckDistance, groundCheckRadius);
+        Gizmos.DrawWireSphere(transform.position + -contactNormal * playerSettings.groundCheckDistance, playerSettings.groundCheckRadius);
 
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(transform.position, transform.position + contactNormal * 2.0f);
 
         Gizmos.color = Color.blue;
-        Gizmos.DrawLine(transform.position, transform.position + -transform.up * groundSnapDistance);
+        Gizmos.DrawLine(transform.position, transform.position + -transform.up * playerSettings.groundSnapDistance);
 
     }
 }
