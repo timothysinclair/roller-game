@@ -92,7 +92,7 @@ MonoBehaviour:
   groundLayers:
     serializedVersion: 2
     m_Bits: 55
-  groundCheckDistance: 1
-  groundCheckRadius: 0.3
+  groundCheckDistance: 0
+  groundCheckRadius: 1
   groundSnapDistance: 1
   maxSnapSpeed: 5
