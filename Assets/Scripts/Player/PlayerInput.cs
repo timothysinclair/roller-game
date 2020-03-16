@@ -29,7 +29,7 @@ public class PlayerInput : MonoBehaviour
         controls.Player.Steering.performed += ctx => steeringInput = ctx.ReadValue<float>();
         controls.Player.AcceleratePress.performed += _ => accelInput = 1.0f;
         controls.Player.AccelerateRelease.performed += _ => accelInput = 0.0f;
-        controls.Player.JumpPress.performed += _ => { movementController.Jump(); movementController.UpdateJumpInput(true); };
+        controls.Player.JumpPress.performed += _ => { movementController.Jump(); movementController.UpdateJumpInput(true); combatController.JumpAttack(); };
         controls.Player.JumpRelease.performed += _ => movementController.UpdateJumpInput(false);
         controls.Player.BrakePress.performed += _ => movementController.braking = true;
         controls.Player.BrakeRelease.performed += _ => movementController.braking = false;
