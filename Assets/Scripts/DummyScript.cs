@@ -5,9 +5,20 @@ using UnityEngine;
 public class DummyScript : MonoBehaviour
 {
     public bool useJumpAttackGrav = false;
+    public bool dead = false;
+    public int Health
+    {
+        get { return m_health; }
+        set
+        {
+            m_health = value;
+            if (value <= 0) { Died(); }
+        }
+    }
 
     PlayerSettings playerSettings;
     Rigidbody _rigidBody;
+    int m_health = 3;
 
     private void Awake()
     {
@@ -17,10 +28,12 @@ public class DummyScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (dead) { return; }
+
         if (other.tag == "KickAttackHB")
         {
             if (useJumpAttackGrav) { GameObject.FindObjectOfType<PlayerCombatController>().FloatingEnemyHit(); }
-            Debug.Log("Dummy take damage");
+            Health -= 1;
         }
     }
 
@@ -37,5 +50,12 @@ public class DummyScript : MonoBehaviour
         else { gravityVar = playerSettings.normalGravity; }
         // Apply gravity
         _rigidBody.AddForce(Vector3.down * Time.deltaTime * gravityVar, ForceMode.Impulse);
+    }
+
+    void Died()
+    {
+        dead = true;
+        GetComponent<Collider>().isTrigger = true;
+        Debug.Log("Dummy died");
     }
 }
