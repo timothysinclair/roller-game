@@ -62,6 +62,8 @@ public class NewSkatingController : MonoBehaviour
         framesSinceGrounded += 1;
         framesSinceJump += 1;
 
+        playerAnimations.braking = this.braking;
+
         if (grinding) { return; }
         // Decided gravity value
 
@@ -103,6 +105,7 @@ public class NewSkatingController : MonoBehaviour
         // Normalise steering and acceleration inputs
         steering = Mathf.Clamp(steering, -1.0f, 1.0f);
         accelInput = Mathf.Clamp(accelInput, 0.0f, 1.0f);
+        // if (drifting) { accelInput = 1.0f; }
 
         playerAnimations.drifting = drifting;
         
