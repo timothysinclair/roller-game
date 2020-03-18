@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerMovementController : MonoBehaviour
+public class NewSkatingController : MonoBehaviour
 {
     // PUBLIC //
     [Header("References")]
