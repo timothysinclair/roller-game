@@ -2,16 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Trick
-{
-    Kick1 = 0,
-    Kick2,
-    Kick3,
-    Grind,
-    EnemyHit,
-    HalfSpin
-};
-
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/PlayerSettings", order = 1)]
 public class PlayerSettings : ScriptableObject
 {
@@ -60,17 +50,4 @@ public class PlayerSettings : ScriptableObject
     public float maxJumpHurtBoxTimer = 0.1f;
     [Tooltip("Maximum time the player has to hit the enemy once in the air")]
     public float maxTimeToHit = 1.0f;
-
-    [Header("Trick Values")]
-    public Dictionary<Trick, int> trickValues = new Dictionary<Trick, int>()
-    {
-        { Trick.HalfSpin, 10 },
-        { Trick.Kick1, 10 },
-        { Trick.Kick2, 20 },
-        { Trick.Kick3, 30 },
-        { Trick.Grind, 10 },
-        { Trick.EnemyHit, 2 } // Divisor for kick value
-    };
-    public float halfSpinValue = 180.0f;
-    public float fullSpinValue = 360.0f;
 }

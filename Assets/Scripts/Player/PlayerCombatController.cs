@@ -13,7 +13,7 @@ public class PlayerCombatController : MonoBehaviour
     [SerializeField] GameObject jumpHurtbox;
 
     // Private
-    bool kickHurtboxActive = false;
+    bool trickPlaying = false;
     enum AttackState
     {
         NONE = 0,
@@ -36,19 +36,17 @@ public class PlayerCombatController : MonoBehaviour
 
     PlayerSettings playerSettings;
     Rigidbody _rigidBody;
-    PlayerScore _pScore;
 
     private void Awake()
     {
         _rigidBody = GetComponent<Rigidbody>();
         playerSettings = Resources.Load<PlayerSettings>("ScriptableObjects/PlayerSettings");
         movementController = GetComponent<PlayerMovementController>();
-        _pScore = GetComponent<PlayerScore>();
     }
 
     private void Update()
     {
-        if (kickHurtboxActive && movementController.IsPlayerGrounded()) { kickHurtboxActive = false; kickHurtbox.SetActive(false); }
+        if (trickPlaying && movementController.IsPlayerGrounded()) { trickPlaying = false; kickHurtbox.SetActive(false); }
 
         // Combo timer
         if (timeSinceLastAttack <= 10.0f) { timeSinceLastAttack += Time.deltaTime; }
@@ -68,7 +66,7 @@ public class PlayerCombatController : MonoBehaviour
     public void BasicAttack()
     {
         // Checks if attacking
-        if (kickHurtboxActive || movementController.IsPlayerGrounded()) { return; }
+        if (trickPlaying || movementController.IsPlayerGrounded()) { return; }
 
         if (currentAttackState == AttackState.NONE) { DoAttack(); }
         else
@@ -86,14 +84,13 @@ public class PlayerCombatController : MonoBehaviour
 
         playerAnimator.SetInteger("KickState", (int)currentAttackState);
         playerAnimator.SetTrigger("Attacking");
-        kickHurtboxActive = true;
+        trickPlaying = true;
         kickHurtbox.SetActive(true);
-        _pScore.AddTrick(AttackStateToTrick(currentAttackState));
     }
 
     public void AttackFinished()
     {
-        kickHurtboxActive = false;
+        trickPlaying = false;
         kickHurtbox.SetActive(false);
         timeSinceLastAttack = 0.0f;
     }
@@ -147,29 +144,5 @@ public class PlayerCombatController : MonoBehaviour
 
         // Reset timer to hit the enemy
         jumpAttackTimer = 0.0f;
-        _pScore.AddTrick(Trick.EnemyHit);
-    }
-
-    Trick AttackStateToTrick(AttackState _state)
-    {
-        switch (_state)
-        {
-            case AttackState.SECOND:
-                {
-                    return Trick.Kick2;
-                }
-            case AttackState.THIRD:
-                {
-                    return Trick.Kick3;
-                }
-
-            default:
-                return Trick.Kick1;
-        }
-    }
-
-    public bool DoingKickAnimation()
-    {
-        return kickHurtboxActive;
     }
 }
