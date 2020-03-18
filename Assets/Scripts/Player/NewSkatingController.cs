@@ -63,6 +63,8 @@ public class NewSkatingController : MonoBehaviour
         framesSinceJump += 1;
 
         if (grinding) { return; }
+
+        playerAnimations.braking = this.braking;
         // Decided gravity value
 
         // If doing a jump attack use that gravity : else if holding jump use that gravity : else use normal gravity
