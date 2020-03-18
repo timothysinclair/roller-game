@@ -18,7 +18,6 @@ public class NewSkatingController : MonoBehaviour
     [HideInInspector] public bool drifting = false;
     private bool grinding = false;
     public bool useJumpAttackGravity = false;
-    public bool tryBoost = false;
 
     // PRIVATE //
 
@@ -97,13 +96,6 @@ public class NewSkatingController : MonoBehaviour
     {
         CheckGrounded();
         UpdateGroundedFrames();
-
-        if (tryBoost && isGrounded)
-        {
-            tryBoost = false;
-            rigidBody.AddForce(transform.forward * Time.deltaTime * 20000000.0f, ForceMode.Acceleration);
-            Debug.Log("Player boosted");
-        }
     }
 
     public void UpdateJumpInput(bool didJump)
@@ -391,6 +383,7 @@ public class NewSkatingController : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(transform.position + -contactNormal * playerSettings.groundCheckDistance, playerSettings.groundCheckRadius, playerSettings.groundLayers, QueryTriggerInteraction.Ignore);
         if (grinding) { isGrounded = true; }
+        if (isGrounded) { GetComponent<PlayerScore>().CheckBuildingScore(); }
         playerAnimations.grounded = isGrounded;
     }
 
