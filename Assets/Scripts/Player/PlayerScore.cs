@@ -45,7 +45,6 @@ public class PlayerScore : MonoBehaviour
             {
                 if (enemyHit) { kickScore += (kickScore / pSettings.trickValues[Trick.EnemyHit]); }
                 Score += buildingScore + kickScore;
-
                 Debug.Log("Score added: " + (buildingScore + kickScore));
             }
             else
@@ -63,7 +62,9 @@ public class PlayerScore : MonoBehaviour
     {
         if (_trick == Trick.EnemyHit) { enemyHit = true; }
         // If score is a kick, add to kick score. Otherwise add to building score
-        if (_trick >= Trick.Kick1 && _trick <= Trick.Kick3) { kickScore += pSettings.trickValues[_trick]; }
+        else if (_trick >= Trick.Kick1 && _trick <= Trick.Kick3) { kickScore += pSettings.trickValues[_trick]; }
         else { buildingScore += pSettings.trickValues[_trick]; }
+
+        Debug.Log("Added trick: " + _trick);
     }
 }

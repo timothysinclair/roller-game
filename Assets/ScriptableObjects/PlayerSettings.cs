@@ -62,12 +62,15 @@ public class PlayerSettings : ScriptableObject
     public float maxTimeToHit = 1.0f;
 
     [Header("Trick Values")]
-    public Dictionary<Trick, int> trickValues = new Dictionary<Trick, int>() {
+    public Dictionary<Trick, int> trickValues = new Dictionary<Trick, int>()
+    {
         { Trick.HalfSpin, 10 },
         { Trick.Kick1, 10 },
         { Trick.Kick2, 20 },
         { Trick.Kick3, 30 },
         { Trick.Grind, 10 },
         { Trick.EnemyHit, 2 } // Divisor for kick value
-        };
+    };
+    public float halfSpinValue = 180.0f;
+    public float fullSpinValue = 360.0f;
 }

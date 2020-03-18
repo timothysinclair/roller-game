@@ -147,6 +147,7 @@ public class PlayerCombatController : MonoBehaviour
 
         // Reset timer to hit the enemy
         jumpAttackTimer = 0.0f;
+        _pScore.AddTrick(Trick.EnemyHit);
     }
 
     Trick AttackStateToTrick(AttackState _state)
