@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerInput : MonoBehaviour
 {
-    private NewSkatingController movementController;
+    private PlayerMovementController movementController;
     private Rigidbody rigidBody;
     private PlayerCombatController combatController;
 
@@ -18,7 +18,7 @@ public class PlayerInput : MonoBehaviour
 
     private void Awake()
     {
-        movementController = GetComponent<NewSkatingController>();
+        movementController = GetComponent<PlayerMovementController>();
         combatController = GetComponent<PlayerCombatController>();
 
         // Input setup
