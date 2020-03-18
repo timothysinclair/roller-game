@@ -6,11 +6,13 @@ public class DummyScript : MonoBehaviour
 {
     public bool useJumpAttackGrav = false;
     public bool dead = false;
+    [SerializeField] Animator enemyAnimator;
     public int Health
     {
         get { return m_health; }
         set
         {
+            if (value < m_health) { enemyAnimator.SetTrigger("Damaged"); }
             m_health = value;
             if (value <= 0) { Died(); }
         }
@@ -55,7 +57,7 @@ public class DummyScript : MonoBehaviour
     void Died()
     {
         dead = true;
-        GetComponent<Collider>().isTrigger = true;
+        //GetComponent<Collider>().isTrigger = true;
         Debug.Log("Dummy died");
     }
 }

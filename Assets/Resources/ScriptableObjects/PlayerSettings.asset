@@ -89,6 +89,7 @@ MonoBehaviour:
   normalGravity: 50
   jumpingGravity: 35
   extraJumpFrames: 10
+  jumpAttackGravity: 1
   groundLayers:
     serializedVersion: 2
     m_Bits: 55
@@ -96,3 +97,7 @@ MonoBehaviour:
   groundCheckRadius: 1
   groundSnapDistance: 1
   maxSnapSpeed: 5
+  maxAttackTime: 0.5
+  minPostAttackTime: 1
+  maxJumpHurtBoxTimer: 0.1
+  maxTimeToHit: 1

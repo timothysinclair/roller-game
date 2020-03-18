@@ -449,6 +449,7 @@ public class NewSkatingController : MonoBehaviour
 
         for (int i = 0; i < collision.contactCount; i++)
         {
+            if (playerSettings.groundLayers != (playerSettings.groundLayers | (1 << collision.gameObject.layer))) { continue; }
             sumOfNormals += collision.GetContact(i).normal.normalized;
 
             // contactNormal = normal;
@@ -467,7 +468,7 @@ public class NewSkatingController : MonoBehaviour
         RaycastHit hit;
 
         // If ground isn't close to us, don't try to snap
-        if (!Physics.Raycast(transform.position, -contactNormal, out hit, playerSettings.groundSnapDistance, playerSettings.groundLayers))
+        if (!Physics.Raycast(transform.position, -contactNormal, out hit, playerSettings.groundSnapDistance, playerSettings.groundLayers, QueryTriggerInteraction.Ignore))
         {
             return false;
         }
@@ -476,6 +477,8 @@ public class NewSkatingController : MonoBehaviour
         Vector3 currentVelocity = rigidBody.velocity;
         float speed = currentVelocity.magnitude;
         if (speed > playerSettings.maxSnapSpeed) { return false; }
+
+        if (hit.collider.gameObject.name == "Dummy") { Debug.Log("Ground check hit dummy"); }
 
         float dot = Vector3.Dot(currentVelocity, hit.normal);
         if (dot > 0.0f)
