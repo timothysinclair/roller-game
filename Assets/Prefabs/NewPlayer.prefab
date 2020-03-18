@@ -380,13 +380,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 428183461590004288}
-  - component: {fileID: 428183461590004294}
   - component: {fileID: 428183461590004291}
   - component: {fileID: 428183461590004290}
   - component: {fileID: 428183461590004289}
   - component: {fileID: 428183461590004316}
   - component: {fileID: 428183461590004317}
   - component: {fileID: 6777751214748936953}
+  - component: {fileID: 8613854314330668296}
   m_Layer: 8
   m_Name: NewPlayer
   m_TagString: Untagged
@@ -414,105 +414,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &428183461590004294
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 428183461590004295}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52a1447bfc46aa84aa47959e54a346bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerAnimations: {fileID: 382083540811880450}
-  moveForce: 120
-  jumpForce: 15
-  turningForce: 100
-  driftTurningForce: 350
-  brakingMultiplier: 1
-  maxSpeed: 50
-  airAcceleration: 0
-  steerHelper: 0.108
-  forwardFriction:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0.017732933
-      outSlope: 0.017732933
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.088681534
-    - serializedVersion: 3
-      time: 20
-      value: 0.25
-      inSlope: 0.0004660173
-      outSlope: 0.0004660173
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.030312825
-      outWeight: 0.1870869
-    - serializedVersion: 3
-      time: 40
-      value: 0.125
-      inSlope: 0.0013559783
-      outSlope: 0.0013559783
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.29484844
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  sidewaysFriction:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0.12524135
-      outSlope: 0.12524135
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.07276646
-    - serializedVersion: 3
-      time: 12
-      value: 1
-      inSlope: 0.0021395457
-      outSlope: 0.0021395457
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.24649942
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 20
-      value: 0.75
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  normalGravity: 40
-  jumpingGravity: 15
-  extraJumpFrames: 10
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 55
-  groundCheckDistance: 0
-  groundCheckRadius: 1
-  groundSnapDistance: 2
-  maxSnapSpeed: 5
-  braking: 0
-  drifting: 0
 --- !u!33 &428183461590004291
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -639,6 +540,28 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8613854314330668296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 428183461590004295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a80a5dc0c6c610749b242400c5223885, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  driftingState: {fileID: 0}
+  brakingState: {fileID: 0}
+  grindingState: {fileID: 0}
+  acceleratingState: {fileID: 0}
+  playerAnimations: {fileID: 0}
+  grindLoop: {fileID: 0}
+  braking: 0
+  drifting: 0
+  useJumpAttackGravity: 0
+  tryBoost: 0
 --- !u!1 &3478902864536478944
 GameObject:
   m_ObjectHideFlags: 0
@@ -1042,6 +965,9 @@ MonoBehaviour:
   accelerating: 0
   drifting: 0
   driftIsRight: 0
+  grinding: 0
+  braking: 0
+  combatController: {fileID: 0}
 --- !u!1001 &382083540811876350
 PrefabInstance:
   m_ObjectHideFlags: 0

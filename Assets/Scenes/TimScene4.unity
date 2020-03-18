@@ -74863,11 +74863,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1134467687018847029, guid: 0e1a5119843c5f745a193badf6172cbf,
         type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.15884234
-      objectReference: {fileID: 0}
-    - target: {fileID: 1134467687018847029, guid: 0e1a5119843c5f745a193badf6172cbf,
-        type: 3}
       propertyPath: m_LocalRotation.y
       value: 0.69697595
       objectReference: {fileID: 0}
@@ -74881,103 +74876,8 @@ PrefabInstance:
       propertyPath: m_LocalRotation.w
       value: 0.68006474
       objectReference: {fileID: 0}
-    - target: {fileID: 3105255128864493119, guid: 0e1a5119843c5f745a193badf6172cbf,
-        type: 3}
-      propertyPath: acceleratingState
-      value: 
-      objectReference: {fileID: 2039940076}
-    - target: {fileID: 3105255128864493119, guid: 0e1a5119843c5f745a193badf6172cbf,
-        type: 3}
-      propertyPath: brakingState
-      value: 
-      objectReference: {fileID: 2039940075}
-    - target: {fileID: 3105255128864493119, guid: 0e1a5119843c5f745a193badf6172cbf,
-        type: 3}
-      propertyPath: driftingState
-      value: 
-      objectReference: {fileID: 2039940074}
-    - target: {fileID: 3105255128864493119, guid: 0e1a5119843c5f745a193badf6172cbf,
-        type: 3}
-      propertyPath: grindingState
-      value: 
-      objectReference: {fileID: 2039940073}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e1a5119843c5f745a193badf6172cbf, type: 3}
---- !u!1 &2039940072 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3105255128864493118, guid: 0e1a5119843c5f745a193badf6172cbf,
-    type: 3}
-  m_PrefabInstance: {fileID: 2039940071}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2039940073
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2039940072}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c10886a83c11e4468476a3addd6717b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2039940074
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2039940072}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbb60f55bee8181439f49818ebebd786, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2039940075
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2039940072}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29ba893f6d099bb408e9e7c2ab4c8f27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2039940076
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2039940072}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28e2549acb1871342b3ebf5bc95d3620, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  leftBooster: {fileID: 2039940078}
-  rightBooster: {fileID: 2039940077}
-  thrusterLoop: {fileID: 2039940079}
---- !u!1 &2039940077 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 813421757, guid: 0e1a5119843c5f745a193badf6172cbf,
-    type: 3}
-  m_PrefabInstance: {fileID: 2039940071}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2039940078 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 685995519, guid: 0e1a5119843c5f745a193badf6172cbf,
-    type: 3}
-  m_PrefabInstance: {fileID: 2039940071}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2039940079 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 88535154, guid: 0e1a5119843c5f745a193badf6172cbf,
-    type: 3}
-  m_PrefabInstance: {fileID: 2039940071}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2042684235
 GameObject:
   m_ObjectHideFlags: 0

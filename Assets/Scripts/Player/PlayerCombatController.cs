@@ -22,7 +22,7 @@ public class PlayerCombatController : MonoBehaviour
         THIRD
     }
     AttackState currentAttackState = AttackState.NONE;
-    NewSkatingController movementController;
+    PlayerMovementController movementController;
 
     // Jump attack
     float jumpHurtboxTimer = 0.0f;
@@ -41,7 +41,7 @@ public class PlayerCombatController : MonoBehaviour
     {
         _rigidBody = GetComponent<Rigidbody>();
         playerSettings = Resources.Load<PlayerSettings>("ScriptableObjects/PlayerSettings");
-        movementController = GetComponent<NewSkatingController>();
+        movementController = GetComponent<PlayerMovementController>();
     }
 
     private void Update()
