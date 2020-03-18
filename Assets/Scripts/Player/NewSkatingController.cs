@@ -8,11 +8,13 @@ public class NewSkatingController : MonoBehaviour
 {
     // PUBLIC //
     [Header("References")]
+    public PlayerDrifting driftingState;
+    public PlayerBraking brakingState;
+    public PlayerGrinding grindingState;
+    public PlayerAccelerating acceleratingState;
+
     public PlayerAnimations playerAnimations;
-    public GameObject leftBooster;
-    public GameObject rightBooster;
     public GameObject grindLoop;
-    public GameObject thrusterLoop;
 
     [HideInInspector] public bool braking = false;
     [HideInInspector] public bool drifting = false;
@@ -63,11 +65,16 @@ public class NewSkatingController : MonoBehaviour
         framesSinceGrounded += 1;
         framesSinceJump += 1;
 
+        grindingState.OnFixedUpdate();
+        brakingState.OnFixedUpdate();
+        driftingState.OnFixedUpdate();
+        acceleratingState.OnFixedUpdate();
+
         if (grinding) { return; }
 
-        playerAnimations.braking = this.braking;
-        // Decided gravity value
+        playerAnimations.braking = brakingState.Active;
 
+        // Decided gravity value
         float gravityValue = 0.0f;
         if (useJumpAttackGravity)
         {
@@ -97,6 +104,11 @@ public class NewSkatingController : MonoBehaviour
 
     private void Update()
     {
+        grindingState.OnUpdate();
+        brakingState.OnUpdate();
+        driftingState.OnUpdate();
+        acceleratingState.OnUpdate();
+
         CheckGrounded();
         UpdateGroundedFrames();
 
@@ -126,18 +138,8 @@ public class NewSkatingController : MonoBehaviour
         playerAnimations.drifting = drifting;
         
         if (Mathf.Abs(steering) > 0.1f) { playerAnimations.driftIsRight = (steering >= 0.0f); }
-        if (accelInput > 0.4f && isGrounded)
-        {
-            leftBooster.SetActive(true);
-            rightBooster.SetActive(true);
-            thrusterLoop.SetActive(true);
-        }
-        else
-        {
-            leftBooster.SetActive(false);
-            rightBooster.SetActive(false);
-            thrusterLoop.SetActive(false);
-        }
+
+        acceleratingState.Active = (accelInput > 0.4f && isGrounded);
 
         playerAnimations.accelerating = (accelInput > 0.4f) ? true : false;
 
