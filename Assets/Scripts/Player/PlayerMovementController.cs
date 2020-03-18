@@ -35,13 +35,20 @@ public class PlayerMovementController : MonoBehaviour
     private float currentTurningForce = 0.0f;
     private GrindRail grindingRail = null;
 
+    private float curYAngle = 0.0f;
+    private float prevYAngle = 0.0f;
+    private float turnAngleTotal = 0.0f;
+    private bool landedThisFrame = false;
+
     private List<bool> groundedFrames;
     private List<GrindRail> grindRails;
 
     private PlayerSettings playerSettings;
+    private PlayerScore pScore;
 
     private void Awake()
     {
+        pScore = GetComponent<PlayerScore>();
         playerSettings = Resources.Load<PlayerSettings>("ScriptableObjects/PlayerSettings");
         rigidBody = GetComponent<Rigidbody>();
 
@@ -111,13 +118,36 @@ public class PlayerMovementController : MonoBehaviour
 
         CheckGrounded();
         UpdateGroundedFrames();
+        CheckSpinning();
+    }
 
-        if (tryBoost && isGrounded)
+    void CheckSpinning()
+    {
+        // Just hit the ground
+        if (isGrounded && landedThisFrame)
         {
-            tryBoost = false;
-            rigidBody.AddForce(transform.forward * Time.deltaTime * 20000000.0f, ForceMode.Acceleration);
-            Debug.Log("Player boosted");
+            turnAngleTotal = Mathf.Abs(turnAngleTotal);
+
+            // Less than 180
+            if (turnAngleTotal < playerSettings.halfSpinValue) { return; }
+
+            int numSpins = Mathf.FloorToInt(turnAngleTotal / playerSettings.halfSpinValue);
+            for (int i = 0; i < numSpins; i++)
+            {
+                pScore.AddTrick(Trick.HalfSpin);
+            }
+
+            GetComponent<PlayerCombatController>().timeSinceLastAttack = 10.0f;
         }
+        else if (isGrounded) { return; }
+
+        curYAngle = transform.rotation.eulerAngles.y;
+
+        turnAngleTotal += Mathf.DeltaAngle(curYAngle, prevYAngle);
+
+        prevYAngle = curYAngle;
+
+        landedThisFrame = false;
     }
 
     public void UpdateJumpInput(bool didJump)
@@ -309,6 +339,8 @@ public class PlayerMovementController : MonoBehaviour
 
         grinding = false;
         grindingRail = null;
+
+        pScore.AddTrick(Trick.Grind);
     }
 
     private void DetermineFriction()
@@ -387,14 +419,26 @@ public class PlayerMovementController : MonoBehaviour
 
             AudioManager.Instance.PlaySoundVaried("SkateJump");
 
+            turnAngleTotal = 0.0f;
+            prevYAngle = transform.rotation.eulerAngles.y;
+            curYAngle = transform.rotation.eulerAngles.y;
+
             if (grinding) { StopGrind(true); }
         }
     }
 
     private void CheckGrounded()
     {
-        isGrounded = Physics.CheckSphere(transform.position + -contactNormal * playerSettings.groundCheckDistance, playerSettings.groundCheckRadius, playerSettings.groundLayers, QueryTriggerInteraction.Ignore);
+        //isGrounded = Physics.CheckSphere(transform.position + -contactNormal * playerSettings.groundCheckDistance, playerSettings.groundCheckRadius, playerSettings.groundLayers, QueryTriggerInteraction.Ignore);
+        bool newGroundedVal = Physics.CheckSphere(transform.position + -contactNormal * playerSettings.groundCheckDistance, playerSettings.groundCheckRadius, playerSettings.groundLayers, QueryTriggerInteraction.Ignore);
+        if (newGroundedVal && !isGrounded)
+        {
+            // Was not grounded but now is
+            landedThisFrame = true;
+        }
+        isGrounded = newGroundedVal;
         if (grinding) { isGrounded = true; }
+        if (isGrounded) { GetComponent<PlayerScore>().CheckBuildingScore(); }
         playerAnimations.grounded = isGrounded;
     }
 
