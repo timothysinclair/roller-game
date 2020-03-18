@@ -18,6 +18,7 @@ public class NewSkatingController : MonoBehaviour
     [HideInInspector] public bool drifting = false;
     private bool grinding = false;
     public bool useJumpAttackGravity = false;
+    public bool tryBoost = false;
 
     // PRIVATE //
 
@@ -67,8 +68,17 @@ public class NewSkatingController : MonoBehaviour
         playerAnimations.braking = this.braking;
         // Decided gravity value
 
-        // If doing a jump attack use that gravity : else if holding jump use that gravity : else use normal gravity
-        float gravityValue = (useJumpAttackGravity) ? playerSettings.jumpAttackGravity : (jumpInput) ? playerSettings.jumpingGravity : playerSettings.normalGravity;
+        float gravityValue = 0.0f;
+        if (useJumpAttackGravity)
+        {
+            // Reset velocity
+            rigidBody.velocity = Vector3.up * rigidBody.velocity.y;
+            gravityValue = playerSettings.jumpAttackGravity;
+        }
+        else
+        {
+            gravityValue = (jumpInput) ? playerSettings.jumpingGravity : playerSettings.normalGravity;
+        }
 
         // Apply gravity
         rigidBody.AddForce(Vector3.down * gravityValue * Time.fixedDeltaTime, ForceMode.Impulse);
@@ -82,13 +92,20 @@ public class NewSkatingController : MonoBehaviour
             // contactNormal = Vector3.up;
         }
 
-        SurfaceAlignment();
+        if (!useJumpAttackGravity) { SurfaceAlignment(); }
     }
 
     private void Update()
     {
         CheckGrounded();
         UpdateGroundedFrames();
+
+        if (tryBoost && isGrounded)
+        {
+            tryBoost = false;
+            rigidBody.AddForce(transform.forward * Time.deltaTime * 20000000.0f, ForceMode.Acceleration);
+            Debug.Log("Player boosted");
+        }
     }
 
     public void UpdateJumpInput(bool didJump)
@@ -434,6 +451,7 @@ public class NewSkatingController : MonoBehaviour
 
         for (int i = 0; i < collision.contactCount; i++)
         {
+            if (playerSettings.groundLayers != (playerSettings.groundLayers | (1 << collision.gameObject.layer))) { continue; }
             sumOfNormals += collision.GetContact(i).normal.normalized;
 
             // contactNormal = normal;
@@ -452,7 +470,7 @@ public class NewSkatingController : MonoBehaviour
         RaycastHit hit;
 
         // If ground isn't close to us, don't try to snap
-        if (!Physics.Raycast(transform.position, -contactNormal, out hit, playerSettings.groundSnapDistance, playerSettings.groundLayers))
+        if (!Physics.Raycast(transform.position, -contactNormal, out hit, playerSettings.groundSnapDistance, playerSettings.groundLayers, QueryTriggerInteraction.Ignore))
         {
             return false;
         }
@@ -461,6 +479,8 @@ public class NewSkatingController : MonoBehaviour
         Vector3 currentVelocity = rigidBody.velocity;
         float speed = currentVelocity.magnitude;
         if (speed > playerSettings.maxSnapSpeed) { return false; }
+
+        if (hit.collider.gameObject.name == "Dummy") { Debug.Log("Ground check hit dummy"); }
 
         float dot = Vector3.Dot(currentVelocity, hit.normal);
         if (dot > 0.0f)

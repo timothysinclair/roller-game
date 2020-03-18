@@ -35,9 +35,11 @@ public class PlayerCombatController : MonoBehaviour
     float timeSinceLastAttack = 10.0f;
 
     PlayerSettings playerSettings;
+    Rigidbody _rigidBody;
 
     private void Awake()
     {
+        _rigidBody = GetComponent<Rigidbody>();
         playerSettings = Resources.Load<PlayerSettings>("ScriptableObjects/PlayerSettings");
         movementController = GetComponent<NewSkatingController>();
     }
@@ -115,8 +117,8 @@ public class PlayerCombatController : MonoBehaviour
         enemyHit.GetComponent<DummyScript>().useJumpAttackGrav = true;
 
         // Player
-        GetComponent<Rigidbody>().velocity = Vector3.zero;
-        GetComponent<Rigidbody>().AddForce(Vector3.up * playerSettings.jumpForce, ForceMode.Impulse);
+        _rigidBody.velocity = Vector3.zero;
+        _rigidBody.AddForce(Vector3.up * playerSettings.jumpForce, ForceMode.Impulse);
 
         // Variables
         jumpAttackTimer = 0.0f;
@@ -129,6 +131,11 @@ public class PlayerCombatController : MonoBehaviour
         jumpAttackHit = false;
         movementController.useJumpAttackGravity = false;
         lastEnemyHit.GetComponent<DummyScript>().useJumpAttackGrav = false;
+
+        Vector3 pushDir = -(lastEnemyHit.transform.position - transform.position).normalized;
+        _rigidBody.AddForce(pushDir * Time.deltaTime * 2000.0f, ForceMode.Impulse);
+        lastEnemyHit.GetComponent<Rigidbody>().AddForce(-pushDir * Time.deltaTime * 2000.0f, ForceMode.Impulse);
+        Debug.Log("Push back");
     }
 
     public void FloatingEnemyHit()
