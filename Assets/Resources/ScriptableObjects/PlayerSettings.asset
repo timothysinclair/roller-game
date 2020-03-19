@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlayerSettings
   m_EditorClassIdentifier: 
   moveForce: 100
-  jumpForce: 30
+  jumpForce: 35
   turningForce: 350
   driftTurningForce: 600
   brakingMultiplier: 1
@@ -86,8 +86,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  normalGravity: 50
-  jumpingGravity: 35
+  normalGravity: 90
+  jumpingGravity: 50
   extraJumpFrames: 10
   jumpAttackGravity: 1
   groundLayers:
@@ -101,3 +101,5 @@ MonoBehaviour:
   minPostAttackTime: 1
   maxJumpHurtBoxTimer: 0.1
   maxTimeToHit: 1
+  halfSpinValue: 180
+  fullSpinValue: 360
