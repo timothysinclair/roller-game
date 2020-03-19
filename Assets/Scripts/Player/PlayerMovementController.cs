@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+using Cinemachine;
+
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMovementController : MonoBehaviour
 {
@@ -12,13 +14,10 @@ public class PlayerMovementController : MonoBehaviour
     public PlayerBraking brakingState;
     public PlayerGrinding grindingState;
     public PlayerAccelerating acceleratingState;
+    [SerializeField] CinemachineStateDrivenCamera cameraState;
 
     public PlayerAnimations playerAnimations;
-    public GameObject grindLoop;
 
-    [HideInInspector] public bool braking = false;
-    [HideInInspector] public bool drifting = false;
-    private bool grinding = false;
     public bool useJumpAttackGravity = false;
     public bool tryBoost = false;
 
@@ -33,7 +32,6 @@ public class PlayerMovementController : MonoBehaviour
     private float currentFriction = 0.0f;
     private const float frictionCoefficient = 3.0f;
     private float currentTurningForce = 0.0f;
-    private GrindRail grindingRail = null;
 
     private float curYAngle = 0.0f;
     private float prevYAngle = 0.0f;
@@ -41,7 +39,6 @@ public class PlayerMovementController : MonoBehaviour
     private bool landedThisFrame = false;
 
     private List<bool> groundedFrames;
-    private List<GrindRail> grindRails;
 
     private PlayerSettings playerSettings;
     private PlayerScore pScore;
@@ -57,14 +54,6 @@ public class PlayerMovementController : MonoBehaviour
         {
             groundedFrames.Add(true);
         }
-        
-        GrindRail[] rails = FindObjectsOfType<GrindRail>();
-        grindRails = new List<GrindRail>();
-
-        for (int i = 0; i < rails.Length; i++)
-        {
-            grindRails.Add(rails[i]);
-        }
     }
 
     private void FixedUpdate()
@@ -77,9 +66,7 @@ public class PlayerMovementController : MonoBehaviour
         driftingState.OnFixedUpdate();
         acceleratingState.OnFixedUpdate();
 
-        if (grinding) { return; }
-
-        playerAnimations.braking = brakingState.Active;
+        if (grindingState.Active) { return; }
 
         // Decided gravity value
         float gravityValue = 0.0f;
@@ -101,12 +88,8 @@ public class PlayerMovementController : MonoBehaviour
         {
             framesSinceGrounded = 0;
         }
-        else
-        {
-            // contactNormal = Vector3.up;
-        }
 
-        if (!useJumpAttackGravity) { SurfaceAlignment(); }
+        SurfaceAlignment();
     }
 
     private void Update()
@@ -157,36 +140,20 @@ public class PlayerMovementController : MonoBehaviour
 
     public void Move(float steering, float accelInput)
     {
-        GrindUpdate();
-
-        if (grinding) { return; }
-
         // Normalise steering and acceleration inputs
         steering = Mathf.Clamp(steering, -1.0f, 1.0f);
         accelInput = Mathf.Clamp(accelInput, 0.0f, 1.0f);
 
-        playerAnimations.drifting = drifting;
-        
-        if (Mathf.Abs(steering) > 0.1f) { playerAnimations.driftIsRight = (steering >= 0.0f); }
-
         acceleratingState.Active = (accelInput > 0.4f && isGrounded);
 
-        playerAnimations.accelerating = (accelInput > 0.4f) ? true : false;
+        grindingState.OnMove(steering, accelInput, isGrounded);
+        brakingState.OnMove(steering, accelInput, isGrounded);
+        driftingState.OnMove(steering, accelInput, isGrounded);
+        acceleratingState.OnMove(steering, accelInput, isGrounded);
 
-        float accelMultiplier = (isGrounded) ? 1.0f : playerSettings.airAcceleration;
+        if (grindingState.Active) { return; }
 
-        // Add force to player
-        Vector3 moveVector = accelInput * playerSettings.moveForce * Time.fixedDeltaTime * transform.forward * accelMultiplier;
-        rigidBody.AddForce(moveVector, ForceMode.Impulse);
-
-        // Add braking force to player
-        if (braking && isGrounded)
-        {
-            Vector3 brakeVector = -rigidBody.velocity * Time.fixedDeltaTime * playerSettings.brakingMultiplier;
-            rigidBody.AddForce(brakeVector, ForceMode.Impulse);
-        }
-
-        currentTurningForce = (drifting) ? playerSettings.driftTurningForce : playerSettings.turningForce;
+        currentTurningForce = (driftingState.Active) ? playerSettings.driftTurningForce : playerSettings.turningForce;
 
         // Turn player
         Vector3 rotationTorque = steering * currentTurningForce * Time.fixedDeltaTime * Vector3.up;
@@ -213,134 +180,6 @@ public class PlayerMovementController : MonoBehaviour
             skaterSpeed.y = verticalSpeed;
             rigidBody.velocity = skaterSpeed;
         }
-    }
-
-    public bool TryGrind()
-    {
-        if (grindRails.Count <= 0) { return false; }
-
-        GrindRail closest = FindClosestRail();
-
-        Debug.Assert(closest, "ERROR: Couldn't find a closest grind rail");
-
-        if (closest.CanGrind(transform.position))
-        {
-            StartGrind(closest, true);
-            return true;
-            // Debug.Log("Started grind with " + closest.name);
-        }
-
-        return false;
-    }
-
-    private GrindRail FindClosestRail()
-    {
-        GrindRail closest = null;
-        float closestDist = 999999.0f;
-
-        for (int i = 0; i < grindRails.Count; i++)
-        {
-            GrindRail testRail = grindRails[i];
-            if (testRail == grindingRail) { continue; }
-
-            float dist = (testRail.ClosestPointOnRail(transform.position) - transform.position).magnitude;
-
-            if (dist < closestDist)
-            {
-                closest = testRail;
-                closestDist = dist;
-            }
-        }
-
-        return closest;
-    }
-
-    private void StartGrind(GrindRail rail, bool playSound)
-    {
-        Debug.Log("Started grind");
-        grinding = true;
-        grindingRail = rail;
-        if (playSound) { AudioManager.Instance.PlaySoundVaried("GrindStart"); }
-        grindLoop.SetActive(true);
-        playerAnimations.grinding = true;
-
-        // Snap player to rail
-        transform.position = grindingRail.ClosestPointOnRail(transform.position);
-
-        Vector3 playerDir = transform.forward;
-        Vector3 railDir = grindingRail.GetForward();
-
-        float dot = Vector3.Dot(playerDir, railDir);
-
-        rigidBody.angularVelocity = Vector3.zero;
-
-        // Player should go forward on the rail
-        if (dot >= 0.0f)
-        {
-            transform.rotation = Quaternion.LookRotation(railDir, grindingRail.GetNormal());
-        }
-        else
-        {
-            transform.rotation = Quaternion.LookRotation(-railDir, grindingRail.GetNormal());
-        }
-            // transform.rotation = Quaternion.LookRotation()
-        }
-
-    private void GrindUpdate()
-    {
-        if (!grinding) { return; }
-
-        // Check if fallen off end of rail
-        if ((grindingRail.ClosestPointOnRail(transform.position) - transform.position).magnitude > 1.0f)
-        {
-            // Try to find another rail to snap to
-
-            GrindRail closest = FindClosestRail();
-
-            float closestDot = Vector3.Dot(closest.GetForward(), rigidBody.velocity.normalized);
-
-            if (Mathf.Abs(closestDot) > 0.75f && closest.CanGrind(transform.position))
-            {
-                StopGrind(false);
-                StartGrind(closest, true);
-            }
-            else
-            {
-                StopGrind(true);
-            }
-
-            return;
-        }
-
-        // If not, align player velocity with rail
-        Vector3 playerVelocity = rigidBody.velocity;
-        Vector3 railDir = grindingRail.GetForward();
-
-        float dot = Vector3.Dot(playerVelocity.normalized, railDir);
-
-        // Player should go forward on the rail
-        if (dot >= 0.0f)
-        {
-            rigidBody.velocity = rigidBody.velocity.magnitude * railDir;
-        }
-        else
-        {
-            rigidBody.velocity = rigidBody.velocity.magnitude * -railDir;
-        }
-    }
-
-    private void StopGrind(bool playSound)
-    {
-        Debug.Log("Stopped Grind");
-
-        if (playSound) { AudioManager.Instance.PlaySoundVaried("GrindEnd"); }
-        grindLoop.SetActive(false);
-        playerAnimations.grinding = false;
-
-        grinding = false;
-        grindingRail = null;
-
-        pScore.AddTrick(Trick.Grind);
     }
 
     private void DetermineFriction()
@@ -390,7 +229,7 @@ public class PlayerMovementController : MonoBehaviour
         float dot = Vector3.Dot(forwardVec, velocity.normalized);
         float angleDiff = Mathf.Acos(dot) * playerSettings.steerHelper;
 
-        if (drifting) { angleDiff *= 0.25f; }
+        if (driftingState.Active) { angleDiff *= 0.25f; }
 
         // If not too side-on, apply steer helper
         if (Mathf.Abs(dot) > 0.75f)
@@ -423,13 +262,12 @@ public class PlayerMovementController : MonoBehaviour
             prevYAngle = transform.rotation.eulerAngles.y;
             curYAngle = transform.rotation.eulerAngles.y;
 
-            if (grinding) { StopGrind(true); }
+            if (grindingState.Active) { grindingState.StopGrind(true); }
         }
     }
 
     private void CheckGrounded()
     {
-        //isGrounded = Physics.CheckSphere(transform.position + -contactNormal * playerSettings.groundCheckDistance, playerSettings.groundCheckRadius, playerSettings.groundLayers, QueryTriggerInteraction.Ignore);
         bool newGroundedVal = Physics.CheckSphere(transform.position + -contactNormal * playerSettings.groundCheckDistance, playerSettings.groundCheckRadius, playerSettings.groundLayers, QueryTriggerInteraction.Ignore);
         if (newGroundedVal && !isGrounded)
         {
@@ -437,7 +275,7 @@ public class PlayerMovementController : MonoBehaviour
             landedThisFrame = true;
         }
         isGrounded = newGroundedVal;
-        if (grinding) { isGrounded = true; }
+        if (grindingState.Active) { isGrounded = true; }
         if (isGrounded) { GetComponent<PlayerScore>().CheckBuildingScore(); }
         playerAnimations.grounded = isGrounded;
     }

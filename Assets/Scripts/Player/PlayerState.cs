@@ -4,16 +4,20 @@ using UnityEngine;
 
 public abstract class PlayerState : MonoBehaviour
 {
+    protected PlayerSettings playerSettings;
+    protected PlayerAnimations playerAnimations;
+    protected Rigidbody rigidBody;
+    protected PlayerMovementController movementController;
+    protected PlayerScore playerScore;
+
     public abstract void OnEnter();
-    public virtual void OnUpdate()
-    {
-        if (!active) { return; }
-    }
-    public virtual void OnFixedUpdate()
-    {
-        if (!active) { return; }
-    }
     public abstract void OnExit();
+
+    public abstract void OnAwake();
+    public abstract void OnUpdate();
+    public abstract void OnFixedUpdate();
+
+    public abstract void OnMove(float steering, float accelInput, bool isGrounded);
     
     private bool active = false;
     public bool Active
@@ -29,5 +33,16 @@ public abstract class PlayerState : MonoBehaviour
 
             active = value;
         }
+    }
+
+    private void Awake()
+    {
+        playerSettings = Resources.Load<PlayerSettings>("ScriptableObjects/PlayerSettings");
+        playerAnimations = FindObjectOfType<PlayerAnimations>();
+        rigidBody = GetComponent<Rigidbody>();
+        movementController = GetComponent<PlayerMovementController>();
+        playerScore = GetComponent<PlayerScore>();
+
+        OnAwake();
     }
 }

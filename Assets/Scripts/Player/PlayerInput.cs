@@ -26,16 +26,16 @@ public class PlayerInput : MonoBehaviour
         controls.Player.Enable();
 
         // Movement
-        controls.Player.Steering.performed += ctx => steeringInput = ctx.ReadValue<float>();
+        controls.Player.Steering.performed += ctx => Steering(ctx.ReadValue<float>());
         controls.Player.AcceleratePress.performed += _ => accelInput = 1.0f;
         controls.Player.AccelerateRelease.performed += _ => accelInput = 0.0f;
         controls.Player.JumpPress.performed += _ => { movementController.Jump(); movementController.UpdateJumpInput(true); };
         controls.Player.JumpRelease.performed += _ => movementController.UpdateJumpInput(false);
         controls.Player.BrakePress.performed += _ => movementController.brakingState.Active = true;
         controls.Player.BrakeRelease.performed += _ => movementController.brakingState.Active = false;
-        controls.Player.DriftPress.performed += _ => movementController.drifting = true;
-        controls.Player.DriftRelease.performed += _ => movementController.drifting = false;
-        controls.Player.Grind.performed += _ => { movementController.TryGrind(); };
+        controls.Player.DriftPress.performed += _ => movementController.driftingState.Active = true;
+        controls.Player.DriftRelease.performed += _ => movementController.driftingState.Active = false;
+        controls.Player.Grind.performed += _ => { movementController.grindingState.TryGrind(); };
 
         // Combat
         controls.Player.Attack.performed += _ => combatController.BasicAttack();
@@ -45,10 +45,20 @@ public class PlayerInput : MonoBehaviour
         //Cursor.lockState = CursorLockMode.Locked;
     }
 
+    private void Start()
+    {
+        
+    }
+
     private void FixedUpdate()
     {
         // Deadzone
         if (Mathf.Abs(steeringInput) <= lAnalogStickDeadzone) { steeringInput = 0.0f; }
         movementController.Move(steeringInput, accelInput);
+    }
+
+    private void Steering(float steeringValue)
+    {
+        steeringInput = steeringValue;
     }
 }
