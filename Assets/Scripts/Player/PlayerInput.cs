@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerInput : MonoBehaviour
 {
-    private NewSkatingController movementController;
+    private PlayerMovementController movementController;
     private Rigidbody rigidBody;
     private PlayerCombatController combatController;
 
@@ -18,7 +18,7 @@ public class PlayerInput : MonoBehaviour
 
     private void Awake()
     {
-        movementController = GetComponent<NewSkatingController>();
+        movementController = GetComponent<PlayerMovementController>();
         combatController = GetComponent<PlayerCombatController>();
 
         // Input setup
@@ -31,8 +31,8 @@ public class PlayerInput : MonoBehaviour
         controls.Player.AccelerateRelease.performed += _ => accelInput = 0.0f;
         controls.Player.JumpPress.performed += _ => { movementController.Jump(); movementController.UpdateJumpInput(true); };
         controls.Player.JumpRelease.performed += _ => movementController.UpdateJumpInput(false);
-        controls.Player.BrakePress.performed += _ => movementController.braking = true;
-        controls.Player.BrakeRelease.performed += _ => movementController.braking = false;
+        controls.Player.BrakePress.performed += _ => movementController.brakingState.Active = true;
+        controls.Player.BrakeRelease.performed += _ => movementController.brakingState.Active = false;
         controls.Player.DriftPress.performed += _ => movementController.drifting = true;
         controls.Player.DriftRelease.performed += _ => movementController.drifting = false;
         controls.Player.Grind.performed += _ => { movementController.TryGrind(); };
