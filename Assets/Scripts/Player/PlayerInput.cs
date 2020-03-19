@@ -35,7 +35,7 @@ public class PlayerInput : MonoBehaviour
         controls.Player.BrakeRelease.performed += _ => movementController.brakingState.Active = false;
         controls.Player.DriftPress.performed += _ => movementController.driftingState.Active = true;
         controls.Player.DriftRelease.performed += _ => movementController.driftingState.Active = false;
-        controls.Player.Grind.performed += _ => { movementController.TryGrind(); };
+        controls.Player.Grind.performed += _ => { movementController.grindingState.TryGrind(); };
 
         // Combat
         controls.Player.Attack.performed += _ => combatController.BasicAttack();
@@ -43,6 +43,11 @@ public class PlayerInput : MonoBehaviour
         // Cursor
         //Cursor.visible = false;
         //Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    private void Start()
+    {
+        
     }
 
     private void FixedUpdate()

@@ -8,22 +8,16 @@ public abstract class PlayerState : MonoBehaviour
     protected PlayerAnimations playerAnimations;
     protected Rigidbody rigidBody;
     protected PlayerMovementController movementController;
+    protected PlayerScore playerScore;
 
     public abstract void OnEnter();
     public abstract void OnExit();
-    public virtual void OnUpdate()
-    {
-        if (!active) { return; }
-    }
-    public virtual void OnFixedUpdate()
-    {
-        if (!active) { return; }
-    }
 
-    public virtual void OnMove(float steering, float accelInput, bool isGrounded)
-    {
-        if (!active) { return; }
-    }
+    public abstract void OnAwake();
+    public abstract void OnUpdate();
+    public abstract void OnFixedUpdate();
+
+    public abstract void OnMove(float steering, float accelInput, bool isGrounded);
     
     private bool active = false;
     public bool Active
@@ -47,5 +41,8 @@ public abstract class PlayerState : MonoBehaviour
         playerAnimations = FindObjectOfType<PlayerAnimations>();
         rigidBody = GetComponent<Rigidbody>();
         movementController = GetComponent<PlayerMovementController>();
+        playerScore = GetComponent<PlayerScore>();
+
+        OnAwake();
     }
 }

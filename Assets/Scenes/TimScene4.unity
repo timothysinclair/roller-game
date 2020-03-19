@@ -22714,7 +22714,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 640074562}
-  m_LocalRotation: {x: -0.15884951, y: -0.6969743, z: 0.16279875, w: -0.68006635}
+  m_LocalRotation: {x: -0.15884952, y: -0.6969742, z: 0.16279873, w: -0.6800664}
   m_LocalPosition: {x: 186.00513, y: 204.4, z: -147.5826}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -37536,6 +37536,12 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &1025354417 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 480680418, guid: 0e1a5119843c5f745a193badf6172cbf,
+    type: 3}
+  m_PrefabInstance: {fileID: 2039940071}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1036631478
 GameObject:
   m_ObjectHideFlags: 0
@@ -75101,6 +75107,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2039940073, guid: 0e1a5119843c5f745a193badf6172cbf, type: 3}
+      propertyPath: grindLoop
+      value: 
+      objectReference: {fileID: 1025354417}
     - target: {fileID: 59406266069389784, guid: 0e1a5119843c5f745a193badf6172cbf,
         type: 3}
       propertyPath: scoreTxt
@@ -75169,22 +75179,22 @@ PrefabInstance:
     - target: {fileID: 1134467686637057627, guid: 0e1a5119843c5f745a193badf6172cbf,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.1587842
+      value: 0.15878421
       objectReference: {fileID: 0}
     - target: {fileID: 1134467686637057627, guid: 0e1a5119843c5f745a193badf6172cbf,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.6969892
+      value: 0.6969891
       objectReference: {fileID: 0}
     - target: {fileID: 1134467686637057627, guid: 0e1a5119843c5f745a193badf6172cbf,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.16286245
+      value: -0.16286243
       objectReference: {fileID: 0}
     - target: {fileID: 1134467686637057627, guid: 0e1a5119843c5f745a193badf6172cbf,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.6800511
+      value: 0.68005115
       objectReference: {fileID: 0}
     - target: {fileID: 1134467687018847029, guid: 0e1a5119843c5f745a193badf6172cbf,
         type: 3}
@@ -75194,7 +75204,7 @@ PrefabInstance:
     - target: {fileID: 1134467687018847029, guid: 0e1a5119843c5f745a193badf6172cbf,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.16280568
+      value: -0.16280569
       objectReference: {fileID: 0}
     - target: {fileID: 1134467687018847029, guid: 0e1a5119843c5f745a193badf6172cbf,
         type: 3}
@@ -75204,7 +75214,7 @@ PrefabInstance:
     - target: {fileID: 1134467687018847029, guid: 0e1a5119843c5f745a193badf6172cbf,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.15884234
+      value: 0.15884236
       objectReference: {fileID: 0}
     - target: {fileID: 4108654479379195438, guid: 0e1a5119843c5f745a193badf6172cbf,
         type: 3}
