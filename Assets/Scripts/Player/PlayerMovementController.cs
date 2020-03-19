@@ -16,8 +16,6 @@ public class PlayerMovementController : MonoBehaviour
     public PlayerAnimations playerAnimations;
     public GameObject grindLoop;
 
-    [HideInInspector] public bool braking = false;
-    [HideInInspector] public bool drifting = false;
     private bool grinding = false;
     public bool useJumpAttackGravity = false;
     public bool tryBoost = false;
@@ -79,8 +77,6 @@ public class PlayerMovementController : MonoBehaviour
 
         if (grinding) { return; }
 
-        playerAnimations.braking = brakingState.Active;
-
         // Decided gravity value
         float gravityValue = 0.0f;
         if (useJumpAttackGravity)
@@ -101,12 +97,8 @@ public class PlayerMovementController : MonoBehaviour
         {
             framesSinceGrounded = 0;
         }
-        else
-        {
-            // contactNormal = Vector3.up;
-        }
 
-        if (!useJumpAttackGravity) { SurfaceAlignment(); }
+        SurfaceAlignment();
     }
 
     private void Update()
@@ -165,28 +157,14 @@ public class PlayerMovementController : MonoBehaviour
         steering = Mathf.Clamp(steering, -1.0f, 1.0f);
         accelInput = Mathf.Clamp(accelInput, 0.0f, 1.0f);
 
-        playerAnimations.drifting = drifting;
-        
-        if (Mathf.Abs(steering) > 0.1f) { playerAnimations.driftIsRight = (steering >= 0.0f); }
-
         acceleratingState.Active = (accelInput > 0.4f && isGrounded);
 
-        playerAnimations.accelerating = (accelInput > 0.4f) ? true : false;
+        grindingState.OnMove(steering, accelInput, isGrounded);
+        brakingState.OnMove(steering, accelInput, isGrounded);
+        driftingState.OnMove(steering, accelInput, isGrounded);
+        acceleratingState.OnMove(steering, accelInput, isGrounded);
 
-        float accelMultiplier = (isGrounded) ? 1.0f : playerSettings.airAcceleration;
-
-        // Add force to player
-        Vector3 moveVector = accelInput * playerSettings.moveForce * Time.fixedDeltaTime * transform.forward * accelMultiplier;
-        rigidBody.AddForce(moveVector, ForceMode.Impulse);
-
-        // Add braking force to player
-        if (braking && isGrounded)
-        {
-            Vector3 brakeVector = -rigidBody.velocity * Time.fixedDeltaTime * playerSettings.brakingMultiplier;
-            rigidBody.AddForce(brakeVector, ForceMode.Impulse);
-        }
-
-        currentTurningForce = (drifting) ? playerSettings.driftTurningForce : playerSettings.turningForce;
+        currentTurningForce = (driftingState.Active) ? playerSettings.driftTurningForce : playerSettings.turningForce;
 
         // Turn player
         Vector3 rotationTorque = steering * currentTurningForce * Time.fixedDeltaTime * Vector3.up;
@@ -283,7 +261,6 @@ public class PlayerMovementController : MonoBehaviour
         {
             transform.rotation = Quaternion.LookRotation(-railDir, grindingRail.GetNormal());
         }
-            // transform.rotation = Quaternion.LookRotation()
         }
 
     private void GrindUpdate()
@@ -390,7 +367,7 @@ public class PlayerMovementController : MonoBehaviour
         float dot = Vector3.Dot(forwardVec, velocity.normalized);
         float angleDiff = Mathf.Acos(dot) * playerSettings.steerHelper;
 
-        if (drifting) { angleDiff *= 0.25f; }
+        if (driftingState.Active) { angleDiff *= 0.25f; }
 
         // If not too side-on, apply steer helper
         if (Mathf.Abs(dot) > 0.75f)
@@ -429,7 +406,6 @@ public class PlayerMovementController : MonoBehaviour
 
     private void CheckGrounded()
     {
-        //isGrounded = Physics.CheckSphere(transform.position + -contactNormal * playerSettings.groundCheckDistance, playerSettings.groundCheckRadius, playerSettings.groundLayers, QueryTriggerInteraction.Ignore);
         bool newGroundedVal = Physics.CheckSphere(transform.position + -contactNormal * playerSettings.groundCheckDistance, playerSettings.groundCheckRadius, playerSettings.groundLayers, QueryTriggerInteraction.Ignore);
         if (newGroundedVal && !isGrounded)
         {

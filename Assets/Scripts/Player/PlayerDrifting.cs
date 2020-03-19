@@ -20,6 +20,15 @@ public class PlayerDrifting : PlayerState
 
     }
 
+    public override void OnMove(float steering, float accelInput, bool isGrounded)
+    {
+        base.OnMove(steering, accelInput, isGrounded);
+
+        playerAnimations.drifting = Active;
+
+        if (Mathf.Abs(steering) > 0.1f) { playerAnimations.driftIsRight = (steering >= 0.0f); }
+    }
+
     public override void OnUpdate()
     {
         base.OnUpdate();

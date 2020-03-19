@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerGrinding : PlayerState
 {
+    private GrindRail currentRail = null;
+
     public override void OnEnter()
     {
         
@@ -20,9 +22,21 @@ public class PlayerGrinding : PlayerState
 
     }
 
+    public override void OnMove(float steering, float accelInput, bool isGrounded)
+    {
+        base.OnMove(steering, accelInput, isGrounded);
+
+
+    }
+
     public override void OnUpdate()
     {
         base.OnUpdate();
+
+    }
+
+    public void ChooseRail(GrindRail newRail)
+    {
 
     }
 }
