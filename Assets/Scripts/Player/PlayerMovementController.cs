@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+using Cinemachine;
+
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMovementController : MonoBehaviour
 {
@@ -12,6 +14,7 @@ public class PlayerMovementController : MonoBehaviour
     public PlayerBraking brakingState;
     public PlayerGrinding grindingState;
     public PlayerAccelerating acceleratingState;
+    [SerializeField] CinemachineStateDrivenCamera cameraState;
 
     public PlayerAnimations playerAnimations;
 
