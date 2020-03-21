@@ -44,6 +44,10 @@ public class PlayerSettings : ScriptableObject
 
     public AnimationCurve turningSpeedModifier;
 
+    [Header("Boost Variables")]
+    public float maxBoost = 100.0f;
+    public float scoreToBoostRatio = 1.0f;
+
     [Header("Friction Variables")]
     public AnimationCurve forwardFriction;
     public AnimationCurve sidewaysFriction;

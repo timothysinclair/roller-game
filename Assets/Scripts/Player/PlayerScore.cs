@@ -27,9 +27,11 @@ public class PlayerScore : MonoBehaviour
         set
         {
             int oldScore = score;
+            int newScore = Mathf.Clamp(value, 0, int.MaxValue);
+            int delta = newScore - oldScore;
             score = value;
 
-            if (score != oldScore) { OnScoreChanged(); }
+            if (delta != 0) { OnScoreChanged(delta); }
         }
     }
 
@@ -73,10 +75,11 @@ public class PlayerScore : MonoBehaviour
         Debug.Log("Added trick: " + _trick);
     }
 
-    private void OnScoreChanged()
+    private void OnScoreChanged(int delta)
     {
         if (scoreText) scoreText.text = "Score: " + score;
         UpdateRankSprite();
+        movementController.boostingState.Boost += delta * playerSettings.scoreToBoostRatio;
     }
 
     private void UpdateRankSprite()

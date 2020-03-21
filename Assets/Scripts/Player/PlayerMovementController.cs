@@ -382,7 +382,8 @@ public class PlayerMovementController : MonoBehaviour
             // Check if delta angle is within allowed range
             float dot = Vector3.Dot(transform.up, collision.GetContact(i).normal.normalized);
 
-            if (dot < playerSettings.minSurfaceAlignDot || playerSettings.groundLayers != (playerSettings.groundLayers | (1 << collision.gameObject.layer))) { continue; }
+            // If the surface isn't similar enough, and the player is on the ground, or the surface is not on an allowed layer, don't count it as a surface
+            if ((dot < playerSettings.minSurfaceAlignDot && isGrounded) || playerSettings.groundLayers != (playerSettings.groundLayers | (1 << collision.gameObject.layer))) { continue; }
             sumOfNormals += collision.GetContact(i).normal.normalized;
 
             // contactNormal = normal;
