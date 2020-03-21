@@ -25,6 +25,7 @@ public class PlayerMovementController : MonoBehaviour
     private float currentFriction = 0.0f;
     private const float frictionCoefficient = 3.0f;
     private float currentTurningForce = 0.0f;
+    private bool usedBoostJump = false;
 
     private float curYAngle = 0.0f;
     private float prevYAngle = 0.0f;
@@ -165,8 +166,13 @@ public class PlayerMovementController : MonoBehaviour
 
         currentTurningForce = (driftingState.Active) ? playerSettings.driftTurningForce : playerSettings.turningForce;
 
+        float playerSpeed = rigidBody.velocity.magnitude;
+
+        // How much the player's speed is affecting their turning
+        float speedRotationModifier = (isGrounded) ? playerSettings.turningSpeedModifier.Evaluate(playerSpeed) : 1.0f;
+
         // Turn player
-        Vector3 rotationTorque = steering * currentTurningForce * Time.fixedDeltaTime * Vector3.up;
+        Vector3 rotationTorque = steering * currentTurningForce * Time.fixedDeltaTime * Vector3.up * speedRotationModifier;
         rigidBody.AddRelativeTorque(rotationTorque);
 
         SteerHelper();
@@ -254,7 +260,7 @@ public class PlayerMovementController : MonoBehaviour
         
     }
 
-    public void Jump()
+    public void Jump(Vector2 moveInput)
     {
         if (isGrounded || CanLenientJump())
         {
@@ -274,6 +280,33 @@ public class PlayerMovementController : MonoBehaviour
 
             if (grindingState.Active) { grindingState.StopGrind(true); }
         }
+        else if (!usedBoostJump)
+        {
+            BoostJump(moveInput);
+        }
+    }
+
+    private void BoostJump(Vector2 moveInput)
+    {
+        // Calculate jump vector
+        float forward = moveInput.normalized.y * playerSettings.boostJumpHorForce;
+        float right = moveInput.normalized.x * playerSettings.boostJumpHorForce;
+        float up = playerSettings.boostJumpVertForce;
+
+        Vector3 boostJumpVector = transform.rotation * new Vector3(right, up, forward);
+        usedBoostJump = true;
+
+        turnAngleTotal = 0.0f;
+        prevYAngle = transform.rotation.eulerAngles.y;
+        curYAngle = transform.rotation.eulerAngles.y;
+
+        if (grindingState.Active) { grindingState.StopGrind(true); }
+
+        Vector3 playerVelocity = rigidBody.velocity;
+        playerVelocity.y = 0.0f;
+        rigidBody.velocity = playerVelocity;
+
+        rigidBody.AddForce(boostJumpVector, ForceMode.Impulse);
     }
 
     private void CheckGrounded()
@@ -283,6 +316,7 @@ public class PlayerMovementController : MonoBehaviour
         {
             // Was not grounded but now is
             landedThisFrame = true;
+            usedBoostJump = false;
         }
         isGrounded = newGroundedVal;
         if (grindingState.Active) { isGrounded = true; }
@@ -346,7 +380,7 @@ public class PlayerMovementController : MonoBehaviour
         for (int i = 0; i < collision.contactCount; i++)
         {
             // Check if delta angle is within allowed range
-            float dot = Vector3.Dot(transform.forward, collision.GetContact(i).normal.normalized);
+            float dot = Vector3.Dot(transform.up, collision.GetContact(i).normal.normalized);
 
             if (dot < playerSettings.minSurfaceAlignDot || playerSettings.groundLayers != (playerSettings.groundLayers | (1 << collision.gameObject.layer))) { continue; }
             sumOfNormals += collision.GetContact(i).normal.normalized;

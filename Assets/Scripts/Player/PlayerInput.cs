@@ -15,6 +15,7 @@ public class PlayerInput : MonoBehaviour
     private float steeringInput = 0.0f;
     private float accelInput = 0.0f;
     private float boostInput = 0.0f;
+    private Vector2 moveInput = Vector2.zero;
     public const float lAnalogStickDeadzone = 0.5f;
 
     private void Awake()
@@ -30,7 +31,7 @@ public class PlayerInput : MonoBehaviour
         controls.Player.Steering.performed += ctx => Steering(ctx.ReadValue<float>());
         controls.Player.AcceleratePress.performed += _ => accelInput = 1.0f;
         controls.Player.AccelerateRelease.performed += _ => accelInput = 0.0f;
-        controls.Player.JumpPress.performed += _ => { movementController.Jump(); movementController.UpdateJumpInput(true); };
+        controls.Player.JumpPress.performed += _ => { movementController.Jump(moveInput); movementController.UpdateJumpInput(true); };
         controls.Player.JumpRelease.performed += _ => movementController.UpdateJumpInput(false);
         controls.Player.BrakePress.performed += _ => movementController.brakingState.Active = true;
         controls.Player.BrakeRelease.performed += _ => movementController.brakingState.Active = false;
@@ -39,6 +40,8 @@ public class PlayerInput : MonoBehaviour
         controls.Player.Grind.performed += _ => { movementController.grindingState.TryGrind(); };
         controls.Player.BoostPress.performed += _ => boostInput = 1.0f;
         controls.Player.BoostRelease.performed += _ => boostInput = 0.0f;
+
+        controls.Player.Movement.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
 
         // Combat
         controls.Player.Attack.performed += _ => combatController.BasicAttack();
@@ -58,6 +61,8 @@ public class PlayerInput : MonoBehaviour
         // Deadzone
         if (Mathf.Abs(steeringInput) <= lAnalogStickDeadzone) { steeringInput = 0.0f; }
         movementController.Move(steeringInput, accelInput, boostInput);
+
+        // Debug.Log(moveInput);
     }
 
     private void Steering(float steeringValue)

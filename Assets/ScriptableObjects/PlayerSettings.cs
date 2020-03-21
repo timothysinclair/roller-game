@@ -21,6 +21,8 @@ public class PlayerSettings : ScriptableObject
     public float moveForce = 1.0f;
     public float boostForce = 200.0f;
     public float jumpForce = 2.0f;
+    public float boostJumpVertForce = 10.0f;
+    public float boostJumpHorForce = 10.0f;
     public float turningForce = 1.0f;
     public float driftTurningForce = 1.0f;
     public float brakingMultiplier = 1.0f;
@@ -29,6 +31,8 @@ public class PlayerSettings : ScriptableObject
     [Range(0.0f, 1.0f)] public float airAcceleration = 0.0f;
     [Range(0.0f, 1.0f)] public float steerHelper = 0.0f;
     [Range(0.0f, 1.0f)] public float minSurfaceAlignDot = 0.0f;
+
+    public AnimationCurve turningSpeedModifier;
 
     [Header("Friction Variables")]
     public AnimationCurve forwardFriction;
