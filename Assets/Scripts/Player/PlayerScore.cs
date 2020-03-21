@@ -1,38 +1,43 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 using TMPro;
 
 public class PlayerScore : MonoBehaviour
 {
     // Public
-    [SerializeField] TextMeshProUGUI scoreTxt;
-    [SerializeField] Animator playerAnimator;
+    public TextMeshProUGUI scoreText;
+    public Image rankEmpty;
+    public Image rankFull;
 
     // Private
+    int buildingScore = 0;
+    int kickScore = 0;
+    bool enemyHit = false;
+    PlayerMovementController movementController;
+    PlayerCombatController combatController;
+    PlayerSettings playerSettings;
+
     int score = 0;
     private int Score
     {
         get { return score; }
         set
         {
+            int oldScore = score;
             score = value;
-            if (scoreTxt) scoreTxt.text = "Score: " + score;
+
+            if (score != oldScore) { OnScoreChanged(); }
         }
     }
-    int buildingScore = 0;
-    int kickScore = 0;
-    bool enemyHit = false;
-    PlayerMovementController movementController;
-    PlayerCombatController combatController;
-    PlayerSettings pSettings;
 
     private void Awake()
     {
         movementController = GetComponent<PlayerMovementController>();
         combatController = GetComponent<PlayerCombatController>();
-        pSettings = Resources.Load<PlayerSettings>("ScriptableObjects/PlayerSettings");
+        playerSettings = Resources.Load<PlayerSettings>("ScriptableObjects/PlayerSettings");
     }
 
     public void CheckBuildingScore()
@@ -43,7 +48,7 @@ public class PlayerScore : MonoBehaviour
             // Check that animation is not being done
             if (!combatController.DoingKickAnimation())
             {
-                if (enemyHit) { kickScore += (kickScore / pSettings.trickValues[Trick.EnemyHit]); }
+                if (enemyHit) { kickScore += (kickScore / playerSettings.trickValues[Trick.EnemyHit]); }
                 Score += buildingScore + kickScore;
                 Debug.Log("Score added: " + (buildingScore + kickScore));
             }
@@ -62,9 +67,34 @@ public class PlayerScore : MonoBehaviour
     {
         if (_trick == Trick.EnemyHit) { enemyHit = true; }
         // If score is a kick, add to kick score. Otherwise add to building score
-        else if (_trick >= Trick.Kick1 && _trick <= Trick.Kick3) { kickScore += pSettings.trickValues[_trick]; }
-        else { buildingScore += pSettings.trickValues[_trick]; }
+        else if (_trick >= Trick.Kick1 && _trick <= Trick.Kick3) { kickScore += playerSettings.trickValues[_trick]; }
+        else { buildingScore += playerSettings.trickValues[_trick]; }
 
         Debug.Log("Added trick: " + _trick);
+    }
+
+    private void OnScoreChanged()
+    {
+        if (scoreText) scoreText.text = "Score: " + score;
+        UpdateRankSprite();
+    }
+
+    private void UpdateRankSprite()
+    {
+        RankDefinition[] ranks = playerSettings.playerRanks;
+        for (int i = 0; i < ranks.Length; i++)
+        {
+            RankDefinition thisRank = ranks[i];
+            if (score > thisRank.enterScore && score < thisRank.exitScore)
+            {
+                rankEmpty.sprite = thisRank.emptySprite;
+                rankFull.sprite = thisRank.fullSprite;
+
+                int scoreRange = thisRank.exitScore - thisRank.enterScore;
+                float fill = (score - thisRank.enterScore) / (float)scoreRange;
+
+                rankFull.fillAmount = fill;
+            }
+        }
     }
 }

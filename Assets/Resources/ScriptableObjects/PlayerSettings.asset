@@ -132,3 +132,29 @@ MonoBehaviour:
   maxTimeToHit: 1
   halfSpinValue: 180
   fullSpinValue: 360
+  playerRanks:
+  - name: D
+    enterScore: 0
+    exitScore: 99
+    emptySprite: {fileID: 21300000, guid: f757ae49999e7314e8cb35e5fbc6dd7a, type: 3}
+    fullSprite: {fileID: 21300000, guid: d17fd9d489c1b344382e771d805d420a, type: 3}
+  - name: C
+    enterScore: 100
+    exitScore: 299
+    emptySprite: {fileID: 21300000, guid: 285a3028c388b16439bc484f69bac58d, type: 3}
+    fullSprite: {fileID: 21300000, guid: 939590bf6eef3684990d7af0043157d1, type: 3}
+  - name: B
+    enterScore: 300
+    exitScore: 599
+    emptySprite: {fileID: 21300000, guid: c8fd4e38832a12247afae471deb68f04, type: 3}
+    fullSprite: {fileID: 21300000, guid: c4f6ea91a9688534e9a0619dbfd68c12, type: 3}
+  - name: A
+    enterScore: 600
+    exitScore: 999
+    emptySprite: {fileID: 21300000, guid: 6c26d8930f0a78c408b84fdb7f0e12a6, type: 3}
+    fullSprite: {fileID: 21300000, guid: d8b1e4bdd7df4ca48a807900b3e8cac3, type: 3}
+  - name: S
+    enterScore: 1000
+    exitScore: 1020
+    emptySprite: {fileID: 21300000, guid: a85b00a4e3b21cc409f958d522f19c25, type: 3}
+    fullSprite: {fileID: 21300000, guid: 3a068cdf416af2440800074c2600bcdd, type: 3}

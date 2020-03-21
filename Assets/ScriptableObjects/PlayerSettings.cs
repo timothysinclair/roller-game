@@ -12,6 +12,16 @@ public enum Trick
     HalfSpin
 };
 
+[System.Serializable]
+public class RankDefinition
+{
+    public string name;
+    public int enterScore;
+    public int exitScore;
+    public Sprite emptySprite;
+    public Sprite fullSprite;
+}
+
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/PlayerSettings", order = 1)]
 public class PlayerSettings : ScriptableObject
 {
@@ -80,4 +90,13 @@ public class PlayerSettings : ScriptableObject
     };
     public float halfSpinValue = 180.0f;
     public float fullSpinValue = 360.0f;
+
+    // 100 D
+    // 200 C
+    // 300 B
+    // 400 A
+    // 20  S
+
+    public RankDefinition[] playerRanks;
+
 }
