@@ -5,7 +5,7 @@ using Cinemachine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    public CinemachineFreeLook playerCam;
+    public CinemachineFreeLook[] playerCams;
     public AnimationCurve fovCurve;
 
     private Rigidbody rigidBody;
@@ -19,10 +19,15 @@ public class PlayerCamera : MonoBehaviour
     {
         float speed = rigidBody.velocity.magnitude;
 
-        float desiredFOV = fovCurve.Evaluate(speed);
-        float currentFOV = playerCam.m_Lens.FieldOfView;
-        float deltaFOV = (desiredFOV - currentFOV) / 8.0f;
+        for (int i = 0; i < playerCams.Length; i++)
+        {
+            CinemachineFreeLook playerCam = playerCams[i];
 
-        playerCam.m_Lens.FieldOfView += deltaFOV;
+            float desiredFOV = fovCurve.Evaluate(speed);
+            float currentFOV = playerCam.m_Lens.FieldOfView;
+            float deltaFOV = (desiredFOV - currentFOV) / 8.0f;
+
+            playerCam.m_Lens.FieldOfView += deltaFOV;
+        }
     }
 }

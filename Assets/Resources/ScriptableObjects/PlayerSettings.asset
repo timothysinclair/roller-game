@@ -12,14 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 214541223ac8d4746bae8fcc216115c0, type: 3}
   m_Name: PlayerSettings
   m_EditorClassIdentifier: 
-  moveForce: 100
+  moveForce: 70
+  boostForce: 200
   jumpForce: 35
   turningForce: 350
   driftTurningForce: 600
   brakingMultiplier: 1
-  maxSpeed: 50
+  normalMaxSpeed: 50
+  boostingMaxSpeed: 100
   airAcceleration: 0
   steerHelper: 0.108
+  minSurfaceAlignDot: 0.5
   forwardFriction:
     serializedVersion: 2
     m_Curve:

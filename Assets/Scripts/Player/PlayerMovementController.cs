@@ -9,13 +9,6 @@ using Cinemachine;
 public class PlayerMovementController : MonoBehaviour
 {
     // PUBLIC //
-    [Header("References")]
-    public PlayerDrifting driftingState;
-    public PlayerBraking brakingState;
-    public PlayerGrinding grindingState;
-    public PlayerAccelerating acceleratingState;
-    [SerializeField] CinemachineStateDrivenCamera cameraState;
-
     public PlayerAnimations playerAnimations;
 
     public bool useJumpAttackGravity = false;
@@ -43,11 +36,23 @@ public class PlayerMovementController : MonoBehaviour
     private PlayerSettings playerSettings;
     private PlayerScore pScore;
 
+    [HideInInspector] public PlayerDrifting driftingState;
+    [HideInInspector] public PlayerBraking brakingState;
+    [HideInInspector] public PlayerGrinding grindingState;
+    [HideInInspector] public PlayerAccelerating acceleratingState;
+    [HideInInspector] public PlayerBoosting boostingState;
+
     private void Awake()
     {
         pScore = GetComponent<PlayerScore>();
         playerSettings = Resources.Load<PlayerSettings>("ScriptableObjects/PlayerSettings");
         rigidBody = GetComponent<Rigidbody>();
+
+        driftingState = GetComponent<PlayerDrifting>();
+        brakingState = GetComponent<PlayerBraking>();
+        grindingState = GetComponent<PlayerGrinding>();
+        acceleratingState = GetComponent<PlayerAccelerating>();
+        boostingState = GetComponent<PlayerBoosting>();
 
         groundedFrames = new List<bool>(playerSettings.extraJumpFrames);
         for (int i = 0; i < playerSettings.extraJumpFrames; i++)
@@ -64,6 +69,7 @@ public class PlayerMovementController : MonoBehaviour
         grindingState.OnFixedUpdate();
         brakingState.OnFixedUpdate();
         driftingState.OnFixedUpdate();
+        boostingState.OnFixedUpdate();
         acceleratingState.OnFixedUpdate();
 
         if (grindingState.Active) { return; }
@@ -97,6 +103,7 @@ public class PlayerMovementController : MonoBehaviour
         grindingState.OnUpdate();
         brakingState.OnUpdate();
         driftingState.OnUpdate();
+        boostingState.OnUpdate();
         acceleratingState.OnUpdate();
 
         CheckGrounded();
@@ -138,18 +145,21 @@ public class PlayerMovementController : MonoBehaviour
         jumpInput = didJump;
     }
 
-    public void Move(float steering, float accelInput)
+    public void Move(float steering, float accelInput, float boostInput)
     {
         // Normalise steering and acceleration inputs
         steering = Mathf.Clamp(steering, -1.0f, 1.0f);
         accelInput = Mathf.Clamp(accelInput, 0.0f, 1.0f);
+        boostInput = Mathf.Clamp(boostInput, 0.0f, 1.0f);
 
+        boostingState.Active = (boostInput > 0.4f);
         acceleratingState.Active = (accelInput > 0.4f && isGrounded);
 
-        grindingState.OnMove(steering, accelInput, isGrounded);
-        brakingState.OnMove(steering, accelInput, isGrounded);
-        driftingState.OnMove(steering, accelInput, isGrounded);
-        acceleratingState.OnMove(steering, accelInput, isGrounded);
+        grindingState.OnMove(steering, accelInput, isGrounded, boostInput);
+        brakingState.OnMove(steering, accelInput, isGrounded, boostInput);
+        driftingState.OnMove(steering, accelInput, isGrounded, boostInput);
+        boostingState.OnMove(steering, accelInput, isGrounded, boostInput);
+        acceleratingState.OnMove(steering, accelInput, isGrounded, boostInput);
 
         if (grindingState.Active) { return; }
 
@@ -174,9 +184,9 @@ public class PlayerMovementController : MonoBehaviour
         skaterSpeed.y = 0.0f;
 
         // If speed over max, cap speed
-        if (skaterSpeed.magnitude > playerSettings.maxSpeed)
+        if (skaterSpeed.magnitude > playerSettings.boostingMaxSpeed)
         {
-            skaterSpeed = skaterSpeed.normalized * playerSettings.maxSpeed;
+            skaterSpeed = skaterSpeed.normalized * playerSettings.boostingMaxSpeed;
             skaterSpeed.y = verticalSpeed;
             rigidBody.velocity = skaterSpeed;
         }
@@ -335,7 +345,10 @@ public class PlayerMovementController : MonoBehaviour
 
         for (int i = 0; i < collision.contactCount; i++)
         {
-            if (playerSettings.groundLayers != (playerSettings.groundLayers | (1 << collision.gameObject.layer))) { continue; }
+            // Check if delta angle is within allowed range
+            float dot = Vector3.Dot(transform.forward, collision.GetContact(i).normal.normalized);
+
+            if (dot < playerSettings.minSurfaceAlignDot || playerSettings.groundLayers != (playerSettings.groundLayers | (1 << collision.gameObject.layer))) { continue; }
             sumOfNormals += collision.GetContact(i).normal.normalized;
 
             // contactNormal = normal;

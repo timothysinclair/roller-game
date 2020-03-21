@@ -24,7 +24,7 @@ public class PlayerDrifting : PlayerState
         if (!Active) { return; }
     }
 
-    public override void OnMove(float steering, float accelInput, bool isGrounded)
+    public override void OnMove(float steering, float accelInput, bool isGrounded, float boostInput)
     {
         if (!Active) { return; }
 

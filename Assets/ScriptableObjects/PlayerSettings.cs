@@ -19,13 +19,16 @@ public class PlayerSettings : ScriptableObject
 
     [Tooltip("The amount of force applied to the skater every frame they are holding accelerate")]
     public float moveForce = 1.0f;
+    public float boostForce = 200.0f;
     public float jumpForce = 2.0f;
     public float turningForce = 1.0f;
     public float driftTurningForce = 1.0f;
     public float brakingMultiplier = 1.0f;
-    public float maxSpeed = 20.0f;
+    public float normalMaxSpeed = 20.0f;
+    public float boostingMaxSpeed = 100.0f;
     [Range(0.0f, 1.0f)] public float airAcceleration = 0.0f;
     [Range(0.0f, 1.0f)] public float steerHelper = 0.0f;
+    [Range(0.0f, 1.0f)] public float minSurfaceAlignDot = 0.0f;
 
     [Header("Friction Variables")]
     public AnimationCurve forwardFriction;

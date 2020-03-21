@@ -14,6 +14,7 @@ public class PlayerInput : MonoBehaviour
     private InputMaster controls;
     private float steeringInput = 0.0f;
     private float accelInput = 0.0f;
+    private float boostInput = 0.0f;
     public const float lAnalogStickDeadzone = 0.5f;
 
     private void Awake()
@@ -36,6 +37,8 @@ public class PlayerInput : MonoBehaviour
         controls.Player.DriftPress.performed += _ => movementController.driftingState.Active = true;
         controls.Player.DriftRelease.performed += _ => movementController.driftingState.Active = false;
         controls.Player.Grind.performed += _ => { movementController.grindingState.TryGrind(); };
+        controls.Player.BoostPress.performed += _ => boostInput = 1.0f;
+        controls.Player.BoostRelease.performed += _ => boostInput = 0.0f;
 
         // Combat
         controls.Player.Attack.performed += _ => combatController.BasicAttack();
@@ -54,7 +57,7 @@ public class PlayerInput : MonoBehaviour
     {
         // Deadzone
         if (Mathf.Abs(steeringInput) <= lAnalogStickDeadzone) { steeringInput = 0.0f; }
-        movementController.Move(steeringInput, accelInput);
+        movementController.Move(steeringInput, accelInput, boostInput);
     }
 
     private void Steering(float steeringValue)

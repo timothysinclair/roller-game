@@ -70,6 +70,22 @@
                     "interactions": "Press(behavior=1)"
                 },
                 {
+                    "name": "Boost Press",
+                    "type": "Button",
+                    "id": "62bb67e8-70bb-4dae-b180-88266afb372f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press"
+                },
+                {
+                    "name": "Boost Release",
+                    "type": "Button",
+                    "id": "10b9b3d9-c9e6-41fc-9f61-6a98baf41194",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press(behavior=1)"
+                },
+                {
                     "name": "Steering",
                     "type": "Button",
                     "id": "96e81ea5-1edc-4636-924a-234c69a2dfdd",
@@ -378,6 +394,50 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Grind",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2976514b-bdb8-4f1c-a5cc-dc086074be1e",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Boost Release",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ced0d8a5-f4fc-4f3f-85f7-8afabc9ae7d3",
+                    "path": "<Keyboard>/leftCtrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Boost Release",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "70ca53fd-ed08-4202-b9ef-609c8c03a65f",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Boost Press",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "30695460-bbe3-45d7-b514-26d33a2c3ca5",
+                    "path": "<Keyboard>/leftCtrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Boost Press",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class PlayerAccelerating : PlayerState
 {
-    public GameObject leftBooster;
-    public GameObject rightBooster;
-    public GameObject thrusterLoop;
+    public GameObject[] effects;
 
     private bool effectsActive = false;
 
@@ -31,12 +29,12 @@ public class PlayerAccelerating : PlayerState
 
     }
 
-    public override void OnMove(float steering, float accelInput, bool isGrounded)
+    public override void OnMove(float steering, float accelInput, bool isGrounded, float boostInput)
     {
         if (!Active) { return; }
         
         // If braking or not on ground, deactivate effects but leave accelerating inputs
-        if (movementController.brakingState.Active || !isGrounded || movementController.driftingState.Active) 
+        if (movementController.brakingState.Active || !isGrounded) 
         { 
             accelInput = 0.0f;
 
@@ -48,26 +46,34 @@ public class PlayerAccelerating : PlayerState
             if (!effectsActive) { ActivateEffects(); }
         }
 
-        float accelMultiplier = (isGrounded) ? 1.0f : playerSettings.airAcceleration;
+        // Only add force if not over normal max speed
+        if (!(rigidBody.velocity.magnitude > playerSettings.normalMaxSpeed))
+        {
+            float accelMultiplier = (isGrounded) ? 1.0f : playerSettings.airAcceleration;
 
-        Vector3 moveVector = accelInput * playerSettings.moveForce * Time.fixedDeltaTime * transform.forward * accelMultiplier;
-        rigidBody.AddForce(moveVector, ForceMode.Impulse);
+            Vector3 moveVector = accelInput * playerSettings.moveForce * Time.fixedDeltaTime * transform.forward * accelMultiplier;
+            rigidBody.AddForce(moveVector, ForceMode.Impulse);
+        }
     }
 
     private void ActivateEffects()
     {
-        leftBooster.SetActive(true);
-        rightBooster.SetActive(true);
-        thrusterLoop.SetActive(true);
+        for (int i = 0; i < effects.Length; i++)
+        {
+            effects[i].SetActive(true);
+        }
+
         effectsActive = true;
         playerAnimations.accelerating = true;
     }
 
     private void DeactivateEffects()
     {
-        leftBooster.SetActive(false);
-        rightBooster.SetActive(false);
-        thrusterLoop.SetActive(false);
+        for (int i = 0; i < effects.Length; i++)
+        {
+            effects[i].SetActive(false);
+        }
+
         effectsActive = false;
         playerAnimations.accelerating = false;
     }

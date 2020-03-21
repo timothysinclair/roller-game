@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerGrinding : PlayerState
 {
     public GameObject grindLoop;
+    public GameObject[] effects;
 
     private List<GrindRail> grindRails;
     private GrindRail currentRail = null;
@@ -28,11 +29,19 @@ public class PlayerGrinding : PlayerState
         grindLoop.SetActive(true);
         playerAnimations.grinding = true;
         rigidBody.angularVelocity = Vector3.zero;
+
+        for (int i = 0; i < effects.Length; i++)
+        {
+            effects[i].SetActive(true);
+        }
     }
 
     public override void OnExit()
     {
-        grindLoop.SetActive(false);
+        for (int i = 0; i < effects.Length; i++)
+        {
+            effects[i].SetActive(false);
+        }
         playerAnimations.grinding = false;
     }
 
@@ -57,7 +66,7 @@ public class PlayerGrinding : PlayerState
         return;
     }
 
-    public override void OnMove(float steering, float accelInput, bool isGrounded)
+    public override void OnMove(float steering, float accelInput, bool isGrounded, float boostInput)
     {
         if (!Active) { return; }
 

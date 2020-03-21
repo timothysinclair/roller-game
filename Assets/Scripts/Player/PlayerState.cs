@@ -17,7 +17,7 @@ public abstract class PlayerState : MonoBehaviour
     public abstract void OnUpdate();
     public abstract void OnFixedUpdate();
 
-    public abstract void OnMove(float steering, float accelInput, bool isGrounded);
+    public abstract void OnMove(float steering, float accelInput, bool isGrounded, float boostInput);
     
     private bool active = false;
     public bool Active

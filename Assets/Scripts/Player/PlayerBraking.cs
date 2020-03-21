@@ -30,7 +30,7 @@ public class PlayerBraking : PlayerState
 
     }
 
-    public override void OnMove(float steering, float accelInput, bool isGrounded)
+    public override void OnMove(float steering, float accelInput, bool isGrounded, float boostInput)
     {
         if (!Active) { return; }
         if (!isGrounded) { return; }
