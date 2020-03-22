@@ -19,6 +19,8 @@ public class PlayerScore : MonoBehaviour
     PlayerMovementController movementController;
     PlayerCombatController combatController;
     PlayerSettings playerSettings;
+    int maxScore;
+    private RankDefinition currentRank;
 
     int score = 0;
     private int Score
@@ -27,9 +29,9 @@ public class PlayerScore : MonoBehaviour
         set
         {
             int oldScore = score;
-            int newScore = Mathf.Clamp(value, 0, int.MaxValue);
+            int newScore = Mathf.Clamp(value, 0, maxScore);
             int delta = newScore - oldScore;
-            score = value;
+            score = newScore;
 
             if (delta != 0) { OnScoreChanged(delta); }
         }
@@ -40,6 +42,7 @@ public class PlayerScore : MonoBehaviour
         movementController = GetComponent<PlayerMovementController>();
         combatController = GetComponent<PlayerCombatController>();
         playerSettings = Resources.Load<PlayerSettings>("ScriptableObjects/PlayerSettings");
+        maxScore = playerSettings.playerRanks[playerSettings.playerRanks.Length - 1].exitScore;
     }
 
     public void CheckBuildingScore()
@@ -88,10 +91,13 @@ public class PlayerScore : MonoBehaviour
         for (int i = 0; i < ranks.Length; i++)
         {
             RankDefinition thisRank = ranks[i];
-            if (score > thisRank.enterScore && score < thisRank.exitScore)
+            if (score > thisRank.enterScore && score <= thisRank.exitScore)
             {
-                rankEmpty.sprite = thisRank.emptySprite;
-                rankFull.sprite = thisRank.fullSprite;
+                if (thisRank != currentRank)
+                {
+                    currentRank = thisRank;
+                    OnRankChanged();
+                }
 
                 int scoreRange = thisRank.exitScore - thisRank.enterScore;
                 float fill = (score - thisRank.enterScore) / (float)scoreRange;
@@ -99,5 +105,14 @@ public class PlayerScore : MonoBehaviour
                 rankFull.fillAmount = fill;
             }
         }
+    }
+
+    private void OnRankChanged()
+    {
+        rankEmpty.sprite = currentRank.emptySprite;
+        rankFull.sprite = currentRank.fullSprite;
+
+        movementController.maxSpeed = currentRank.maxSpeed;
+        movementController.boostingMaxSpeed = currentRank.boostingMaxSpeed;
     }
 }

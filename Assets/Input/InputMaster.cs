@@ -19,7 +19,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
             ""id"": ""d567e582-8787-4062-ae39-6305dce63abf"",
             ""actions"": [
                 {
-                    ""name"": ""Accelerate Press"",
+                    ""name"": ""Boost Press"",
                     ""type"": ""Button"",
                     ""id"": ""95ee71e1-3707-4ec0-8c41-9d2d4c2f49b2"",
                     ""expectedControlType"": """",
@@ -27,7 +27,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": ""Press""
                 },
                 {
-                    ""name"": ""Accelerate Release"",
+                    ""name"": ""Boost Release"",
                     ""type"": ""Button"",
                     ""id"": ""0b8f2a22-f499-47eb-a8fa-c9cd5bae4d6c"",
                     ""expectedControlType"": """",
@@ -83,7 +83,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": ""Press(behavior=1)""
                 },
                 {
-                    ""name"": ""Boost Press"",
+                    ""name"": ""Accelerate Press"",
                     ""type"": ""Button"",
                     ""id"": ""62bb67e8-70bb-4dae-b180-88266afb372f"",
                     ""expectedControlType"": """",
@@ -91,7 +91,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": ""Press""
                 },
                 {
-                    ""name"": ""Boost Release"",
+                    ""name"": ""Accelerate Release"",
                     ""type"": ""Button"",
                     ""id"": ""10b9b3d9-c9e6-41fc-9f61-6a98baf41194"",
                     ""expectedControlType"": """",
@@ -139,7 +139,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Accelerate Press"",
+                    ""action"": ""Boost Press"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -150,7 +150,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""Accelerate Press"",
+                    ""action"": ""Boost Press"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -161,7 +161,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Accelerate Release"",
+                    ""action"": ""Boost Release"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -172,7 +172,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""Accelerate Release"",
+                    ""action"": ""Boost Release"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -425,7 +425,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Boost Release"",
+                    ""action"": ""Accelerate Release"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -436,7 +436,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""Boost Release"",
+                    ""action"": ""Accelerate Release"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -447,7 +447,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Boost Press"",
+                    ""action"": ""Accelerate Press"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -458,7 +458,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""Boost Press"",
+                    ""action"": ""Accelerate Press"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -607,16 +607,16 @@ public class @InputMaster : IInputActionCollection, IDisposable
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_AcceleratePress = m_Player.FindAction("Accelerate Press", throwIfNotFound: true);
-        m_Player_AccelerateRelease = m_Player.FindAction("Accelerate Release", throwIfNotFound: true);
+        m_Player_BoostPress = m_Player.FindAction("Boost Press", throwIfNotFound: true);
+        m_Player_BoostRelease = m_Player.FindAction("Boost Release", throwIfNotFound: true);
         m_Player_BrakePress = m_Player.FindAction("Brake Press", throwIfNotFound: true);
         m_Player_BrakeRelease = m_Player.FindAction("Brake Release", throwIfNotFound: true);
         m_Player_JumpPress = m_Player.FindAction("Jump Press", throwIfNotFound: true);
         m_Player_JumpRelease = m_Player.FindAction("Jump Release", throwIfNotFound: true);
         m_Player_DriftPress = m_Player.FindAction("Drift Press", throwIfNotFound: true);
         m_Player_DriftRelease = m_Player.FindAction("Drift Release", throwIfNotFound: true);
-        m_Player_BoostPress = m_Player.FindAction("Boost Press", throwIfNotFound: true);
-        m_Player_BoostRelease = m_Player.FindAction("Boost Release", throwIfNotFound: true);
+        m_Player_AcceleratePress = m_Player.FindAction("Accelerate Press", throwIfNotFound: true);
+        m_Player_AccelerateRelease = m_Player.FindAction("Accelerate Release", throwIfNotFound: true);
         m_Player_Steering = m_Player.FindAction("Steering", throwIfNotFound: true);
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         m_Player_Grind = m_Player.FindAction("Grind", throwIfNotFound: true);
@@ -670,16 +670,16 @@ public class @InputMaster : IInputActionCollection, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private IPlayerActions m_PlayerActionsCallbackInterface;
-    private readonly InputAction m_Player_AcceleratePress;
-    private readonly InputAction m_Player_AccelerateRelease;
+    private readonly InputAction m_Player_BoostPress;
+    private readonly InputAction m_Player_BoostRelease;
     private readonly InputAction m_Player_BrakePress;
     private readonly InputAction m_Player_BrakeRelease;
     private readonly InputAction m_Player_JumpPress;
     private readonly InputAction m_Player_JumpRelease;
     private readonly InputAction m_Player_DriftPress;
     private readonly InputAction m_Player_DriftRelease;
-    private readonly InputAction m_Player_BoostPress;
-    private readonly InputAction m_Player_BoostRelease;
+    private readonly InputAction m_Player_AcceleratePress;
+    private readonly InputAction m_Player_AccelerateRelease;
     private readonly InputAction m_Player_Steering;
     private readonly InputAction m_Player_Attack;
     private readonly InputAction m_Player_Grind;
@@ -688,16 +688,16 @@ public class @InputMaster : IInputActionCollection, IDisposable
     {
         private @InputMaster m_Wrapper;
         public PlayerActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
-        public InputAction @AcceleratePress => m_Wrapper.m_Player_AcceleratePress;
-        public InputAction @AccelerateRelease => m_Wrapper.m_Player_AccelerateRelease;
+        public InputAction @BoostPress => m_Wrapper.m_Player_BoostPress;
+        public InputAction @BoostRelease => m_Wrapper.m_Player_BoostRelease;
         public InputAction @BrakePress => m_Wrapper.m_Player_BrakePress;
         public InputAction @BrakeRelease => m_Wrapper.m_Player_BrakeRelease;
         public InputAction @JumpPress => m_Wrapper.m_Player_JumpPress;
         public InputAction @JumpRelease => m_Wrapper.m_Player_JumpRelease;
         public InputAction @DriftPress => m_Wrapper.m_Player_DriftPress;
         public InputAction @DriftRelease => m_Wrapper.m_Player_DriftRelease;
-        public InputAction @BoostPress => m_Wrapper.m_Player_BoostPress;
-        public InputAction @BoostRelease => m_Wrapper.m_Player_BoostRelease;
+        public InputAction @AcceleratePress => m_Wrapper.m_Player_AcceleratePress;
+        public InputAction @AccelerateRelease => m_Wrapper.m_Player_AccelerateRelease;
         public InputAction @Steering => m_Wrapper.m_Player_Steering;
         public InputAction @Attack => m_Wrapper.m_Player_Attack;
         public InputAction @Grind => m_Wrapper.m_Player_Grind;
@@ -711,12 +711,12 @@ public class @InputMaster : IInputActionCollection, IDisposable
         {
             if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
             {
-                @AcceleratePress.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAcceleratePress;
-                @AcceleratePress.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAcceleratePress;
-                @AcceleratePress.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAcceleratePress;
-                @AccelerateRelease.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAccelerateRelease;
-                @AccelerateRelease.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAccelerateRelease;
-                @AccelerateRelease.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAccelerateRelease;
+                @BoostPress.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBoostPress;
+                @BoostPress.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBoostPress;
+                @BoostPress.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBoostPress;
+                @BoostRelease.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBoostRelease;
+                @BoostRelease.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBoostRelease;
+                @BoostRelease.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBoostRelease;
                 @BrakePress.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrakePress;
                 @BrakePress.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrakePress;
                 @BrakePress.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrakePress;
@@ -735,12 +735,12 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @DriftRelease.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDriftRelease;
                 @DriftRelease.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDriftRelease;
                 @DriftRelease.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDriftRelease;
-                @BoostPress.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBoostPress;
-                @BoostPress.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBoostPress;
-                @BoostPress.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBoostPress;
-                @BoostRelease.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBoostRelease;
-                @BoostRelease.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBoostRelease;
-                @BoostRelease.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBoostRelease;
+                @AcceleratePress.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAcceleratePress;
+                @AcceleratePress.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAcceleratePress;
+                @AcceleratePress.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAcceleratePress;
+                @AccelerateRelease.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAccelerateRelease;
+                @AccelerateRelease.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAccelerateRelease;
+                @AccelerateRelease.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAccelerateRelease;
                 @Steering.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSteering;
                 @Steering.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSteering;
                 @Steering.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSteering;
@@ -757,12 +757,12 @@ public class @InputMaster : IInputActionCollection, IDisposable
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @AcceleratePress.started += instance.OnAcceleratePress;
-                @AcceleratePress.performed += instance.OnAcceleratePress;
-                @AcceleratePress.canceled += instance.OnAcceleratePress;
-                @AccelerateRelease.started += instance.OnAccelerateRelease;
-                @AccelerateRelease.performed += instance.OnAccelerateRelease;
-                @AccelerateRelease.canceled += instance.OnAccelerateRelease;
+                @BoostPress.started += instance.OnBoostPress;
+                @BoostPress.performed += instance.OnBoostPress;
+                @BoostPress.canceled += instance.OnBoostPress;
+                @BoostRelease.started += instance.OnBoostRelease;
+                @BoostRelease.performed += instance.OnBoostRelease;
+                @BoostRelease.canceled += instance.OnBoostRelease;
                 @BrakePress.started += instance.OnBrakePress;
                 @BrakePress.performed += instance.OnBrakePress;
                 @BrakePress.canceled += instance.OnBrakePress;
@@ -781,12 +781,12 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @DriftRelease.started += instance.OnDriftRelease;
                 @DriftRelease.performed += instance.OnDriftRelease;
                 @DriftRelease.canceled += instance.OnDriftRelease;
-                @BoostPress.started += instance.OnBoostPress;
-                @BoostPress.performed += instance.OnBoostPress;
-                @BoostPress.canceled += instance.OnBoostPress;
-                @BoostRelease.started += instance.OnBoostRelease;
-                @BoostRelease.performed += instance.OnBoostRelease;
-                @BoostRelease.canceled += instance.OnBoostRelease;
+                @AcceleratePress.started += instance.OnAcceleratePress;
+                @AcceleratePress.performed += instance.OnAcceleratePress;
+                @AcceleratePress.canceled += instance.OnAcceleratePress;
+                @AccelerateRelease.started += instance.OnAccelerateRelease;
+                @AccelerateRelease.performed += instance.OnAccelerateRelease;
+                @AccelerateRelease.canceled += instance.OnAccelerateRelease;
                 @Steering.started += instance.OnSteering;
                 @Steering.performed += instance.OnSteering;
                 @Steering.canceled += instance.OnSteering;
@@ -823,16 +823,16 @@ public class @InputMaster : IInputActionCollection, IDisposable
     }
     public interface IPlayerActions
     {
-        void OnAcceleratePress(InputAction.CallbackContext context);
-        void OnAccelerateRelease(InputAction.CallbackContext context);
+        void OnBoostPress(InputAction.CallbackContext context);
+        void OnBoostRelease(InputAction.CallbackContext context);
         void OnBrakePress(InputAction.CallbackContext context);
         void OnBrakeRelease(InputAction.CallbackContext context);
         void OnJumpPress(InputAction.CallbackContext context);
         void OnJumpRelease(InputAction.CallbackContext context);
         void OnDriftPress(InputAction.CallbackContext context);
         void OnDriftRelease(InputAction.CallbackContext context);
-        void OnBoostPress(InputAction.CallbackContext context);
-        void OnBoostRelease(InputAction.CallbackContext context);
+        void OnAcceleratePress(InputAction.CallbackContext context);
+        void OnAccelerateRelease(InputAction.CallbackContext context);
         void OnSteering(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
         void OnGrind(InputAction.CallbackContext context);

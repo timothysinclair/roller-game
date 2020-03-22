@@ -47,7 +47,7 @@ public class PlayerAccelerating : PlayerState
         }
 
         // Only add force if not over normal max speed
-        if (!(rigidBody.velocity.magnitude > playerSettings.normalMaxSpeed))
+        if (!(rigidBody.velocity.magnitude > movementController.maxSpeed))
         {
             float accelMultiplier = (isGrounded) ? 1.0f : playerSettings.airAcceleration;
 

@@ -42,6 +42,8 @@ public class PlayerMovementController : MonoBehaviour
     [HideInInspector] public PlayerGrinding grindingState;
     [HideInInspector] public PlayerAccelerating acceleratingState;
     [HideInInspector] public PlayerBoosting boostingState;
+    [HideInInspector] public float maxSpeed;
+    [HideInInspector] public float boostingMaxSpeed;
 
     private void Awake()
     {
@@ -60,6 +62,9 @@ public class PlayerMovementController : MonoBehaviour
         {
             groundedFrames.Add(true);
         }
+
+        maxSpeed = playerSettings.playerRanks[0].maxSpeed;
+        boostingMaxSpeed = playerSettings.playerRanks[0].boostingMaxSpeed;
     }
 
     private void FixedUpdate()
@@ -190,9 +195,9 @@ public class PlayerMovementController : MonoBehaviour
         skaterSpeed.y = 0.0f;
 
         // If speed over max, cap speed
-        if (skaterSpeed.magnitude > playerSettings.boostingMaxSpeed)
+        if (skaterSpeed.magnitude > boostingMaxSpeed)
         {
-            skaterSpeed = skaterSpeed.normalized * playerSettings.boostingMaxSpeed;
+            skaterSpeed = skaterSpeed.normalized * boostingMaxSpeed;
             skaterSpeed.y = verticalSpeed;
             rigidBody.velocity = skaterSpeed;
         }

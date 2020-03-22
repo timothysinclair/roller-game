@@ -20,6 +20,8 @@ public class RankDefinition
     public int exitScore;
     public Sprite emptySprite;
     public Sprite fullSprite;
+    public float maxSpeed;
+    public float boostingMaxSpeed;
 }
 
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/PlayerSettings", order = 1)]
