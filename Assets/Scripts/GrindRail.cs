@@ -64,6 +64,6 @@ public class GrindRail : MonoBehaviour
         Gizmos.DrawLine(transform.position, railEnd.position);
 
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + GetNormal());
+        Gizmos.DrawLine(transform.position, normalTransform.position);
     }
 }
