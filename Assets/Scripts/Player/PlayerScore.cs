@@ -15,6 +15,7 @@ public class PlayerScore : MonoBehaviour
     // Private
     int buildingScore = 0;
     int kickScore = 0;
+    int grindingScore = 0;
     bool enemyHit = false;
     PlayerMovementController movementController;
     PlayerCombatController combatController;
@@ -48,14 +49,14 @@ public class PlayerScore : MonoBehaviour
     public void CheckBuildingScore()
     {
         // Add the built up scores to total
-        if (buildingScore > 0 || kickScore > 0)
+        if (buildingScore > 0 || kickScore > 0 || grindingScore > 0)
         {
             // Check that animation is not being done
             if (!combatController.DoingKickAnimation())
             {
                 if (enemyHit) { kickScore += (kickScore / playerSettings.trickValues[Trick.EnemyHit]); }
-                Score += buildingScore + kickScore;
-                Debug.Log("Score added: " + (buildingScore + kickScore));
+                Score += buildingScore + kickScore + grindingScore;
+                Debug.Log("Score added: " + (buildingScore + kickScore + grindingScore));
             }
             else
             {
@@ -64,15 +65,17 @@ public class PlayerScore : MonoBehaviour
 
             buildingScore = 0;
             kickScore = 0;
+            grindingScore = 0;
             enemyHit = false;
         }
     }
 
-    public void AddTrick(Trick _trick)
+    public void AddTrick(Trick _trick, float _grindTime = 0.0f)
     {
         if (_trick == Trick.EnemyHit) { enemyHit = true; }
         // If score is a kick, add to kick score. Otherwise add to building score
         else if (_trick >= Trick.Kick1 && _trick <= Trick.Kick3) { kickScore += playerSettings.trickValues[_trick]; }
+        else if (_trick == Trick.Grind) { grindingScore += Mathf.FloorToInt((float)playerSettings.trickValues[Trick.Grind] * _grindTime); }
         else { buildingScore += playerSettings.trickValues[_trick]; }
 
         Debug.Log("Added trick: " + _trick);
