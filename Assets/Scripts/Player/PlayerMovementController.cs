@@ -267,7 +267,7 @@ public class PlayerMovementController : MonoBehaviour
 
     public void Jump(Vector2 moveInput)
     {
-        if (isGrounded || CanLenientJump())
+        if ((isGrounded || CanLenientJump()) && !IsVertical())
         {
             GetComponent<PlayerCombatController>().SpawnJumpHurtbox();
 
@@ -289,6 +289,18 @@ public class PlayerMovementController : MonoBehaviour
         {
             BoostJump(moveInput);
         }
+    }
+
+    bool IsVertical()
+    {
+        float dot = Vector3.Dot(transform.up, Vector3.up);
+        if (dot >= 0.7f)
+        {
+            return false;
+        }
+
+        // Horizontal
+        return true;
     }
 
     private void BoostJump(Vector2 moveInput)

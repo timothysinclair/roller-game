@@ -12,6 +12,8 @@ public class PlayerGrinding : PlayerState
 
     // The distance the player needs to be from a rail in order to fall off
     private float fallenOffDistance = 1.0f;
+    float grindTimer = 0.0f;
+    bool grinding = false;
 
     public override void OnAwake()
     {
@@ -26,6 +28,8 @@ public class PlayerGrinding : PlayerState
 
     public override void OnEnter()
     {
+        grindTimer = 0.0f;
+        grinding = true;
         grindLoop.SetActive(true);
         playerAnimations.grinding = true;
         rigidBody.angularVelocity = Vector3.zero;
@@ -43,6 +47,9 @@ public class PlayerGrinding : PlayerState
             effects[i].SetActive(false);
         }
         playerAnimations.grinding = false;
+
+        grinding = false;
+        playerScore.AddTrick(Trick.Grind, grindTimer);
     }
 
     public override void OnFixedUpdate()
@@ -110,6 +117,11 @@ public class PlayerGrinding : PlayerState
     public override void OnUpdate()
     {
         if (!Active) { return; }
+
+        if (grinding)
+        {
+            grindTimer += Time.deltaTime;
+        }
     }
 
     private void StartGrind(GrindRail rail, bool playSound)
@@ -143,8 +155,6 @@ public class PlayerGrinding : PlayerState
         if (playSound) { AudioManager.Instance.PlaySoundVaried("GrindEnd"); }
         
         currentRail = null;
-
-        playerScore.AddTrick(Trick.Grind);
     }
 
     private GrindRail FindClosestRail()
