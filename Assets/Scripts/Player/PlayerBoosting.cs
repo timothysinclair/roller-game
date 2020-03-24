@@ -49,12 +49,13 @@ public class PlayerBoosting : PlayerState
         if (Boost <= 0.001f && effectsActive)
         {
             DeactivateEffects();
-            return;
         }
         else if (Boost > 0.001f && !effectsActive)
         {
             ActivateEffects();
         }
+
+        if (Boost <= 0.001f) { return; }
 
         //if (boostInput > 0.0f && isGrounded)
         //{

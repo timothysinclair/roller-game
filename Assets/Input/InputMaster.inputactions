@@ -6,7 +6,7 @@
             "id": "d567e582-8787-4062-ae39-6305dce63abf",
             "actions": [
                 {
-                    "name": "Accelerate Press",
+                    "name": "Boost Press",
                     "type": "Button",
                     "id": "95ee71e1-3707-4ec0-8c41-9d2d4c2f49b2",
                     "expectedControlType": "",
@@ -14,7 +14,7 @@
                     "interactions": "Press"
                 },
                 {
-                    "name": "Accelerate Release",
+                    "name": "Boost Release",
                     "type": "Button",
                     "id": "0b8f2a22-f499-47eb-a8fa-c9cd5bae4d6c",
                     "expectedControlType": "",
@@ -70,7 +70,7 @@
                     "interactions": "Press(behavior=1)"
                 },
                 {
-                    "name": "Boost Press",
+                    "name": "Accelerate Press",
                     "type": "Button",
                     "id": "62bb67e8-70bb-4dae-b180-88266afb372f",
                     "expectedControlType": "",
@@ -78,7 +78,7 @@
                     "interactions": "Press"
                 },
                 {
-                    "name": "Boost Release",
+                    "name": "Accelerate Release",
                     "type": "Button",
                     "id": "10b9b3d9-c9e6-41fc-9f61-6a98baf41194",
                     "expectedControlType": "",
@@ -126,7 +126,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Accelerate Press",
+                    "action": "Boost Press",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -137,7 +137,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Accelerate Press",
+                    "action": "Boost Press",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -148,7 +148,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Accelerate Release",
+                    "action": "Boost Release",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -159,7 +159,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Accelerate Release",
+                    "action": "Boost Release",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -412,7 +412,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Boost Release",
+                    "action": "Accelerate Release",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -423,7 +423,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Boost Release",
+                    "action": "Accelerate Release",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -434,7 +434,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Boost Press",
+                    "action": "Accelerate Press",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -445,7 +445,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Boost Press",
+                    "action": "Accelerate Press",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

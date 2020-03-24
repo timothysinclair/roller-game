@@ -20,6 +20,8 @@ public class RankDefinition
     public int exitScore;
     public Sprite emptySprite;
     public Sprite fullSprite;
+    public float maxSpeed;
+    public float boostingMaxSpeed;
 }
 
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/PlayerSettings", order = 1)]
@@ -60,6 +62,8 @@ public class PlayerSettings : ScriptableObject
     public int extraJumpFrames = 10;
     [Tooltip("Gravity used when attacking in the air")]
     public float jumpAttackGravity = 1.0f;
+    [Tooltip("Angle check if vertical or horizontal")]
+    public float verticalAngle = 45.0f;
 
     [Header("Ground Checking")]
     public LayerMask groundLayers = -1;
