@@ -11,6 +11,8 @@ public class PlayerScore : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public Image rankEmpty;
     public Image rankFull;
+    public TextMeshProUGUI currentCollectibles;
+    public TextMeshProUGUI maxCollectibles;
 
     // Private
     int buildingScore = 0;
@@ -22,6 +24,8 @@ public class PlayerScore : MonoBehaviour
     PlayerSettings playerSettings;
     int maxScore;
     private RankDefinition currentRank;
+    private int collectiblesCollected = 0;
+    private int totalCollectibles;
 
     int score = 0;
     private int Score
@@ -44,6 +48,9 @@ public class PlayerScore : MonoBehaviour
         combatController = GetComponent<PlayerCombatController>();
         playerSettings = Resources.Load<PlayerSettings>("ScriptableObjects/PlayerSettings");
         maxScore = playerSettings.playerRanks[playerSettings.playerRanks.Length - 1].exitScore;
+
+        totalCollectibles = FindObjectsOfType<Collectible>().Length;
+        maxCollectibles.text = totalCollectibles.ToString();
     }
 
     public void CheckBuildingScore()
@@ -117,5 +124,11 @@ public class PlayerScore : MonoBehaviour
 
         movementController.maxSpeed = currentRank.maxSpeed;
         movementController.boostingMaxSpeed = currentRank.boostingMaxSpeed;
+    }
+
+    public void CollectCollectible()
+    {
+        collectiblesCollected += 1;
+        currentCollectibles.text = collectiblesCollected.ToString();
     }
 }
