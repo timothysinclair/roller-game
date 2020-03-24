@@ -14,10 +14,14 @@ public class PlayerScore : MonoBehaviour
     public TextMeshProUGUI currentCollectibles;
     public TextMeshProUGUI maxCollectibles;
 
+    [SerializeField] TextMeshProUGUI buildingScoreTxt;
+    [SerializeField] Animator textAnimator;
+
     // Private
     int buildingScore = 0;
     int kickScore = 0;
     int grindingScore = 0;
+    int scoreToAdd = 0;
     bool enemyHit = false;
     PlayerMovementController movementController;
     PlayerCombatController combatController;
@@ -26,6 +30,7 @@ public class PlayerScore : MonoBehaviour
     private RankDefinition currentRank;
     private int collectiblesCollected = 0;
     private int totalCollectibles;
+    bool scoreAnimating = false;
 
     int score = 0;
     private int Score
@@ -58,23 +63,60 @@ public class PlayerScore : MonoBehaviour
         // Add the built up scores to total
         if (buildingScore > 0 || kickScore > 0 || grindingScore > 0)
         {
+            if (scoreAnimating) { return; }
+            scoreAnimating = true;
+            scoreToAdd = GetScoreToAdd();
+
             // Check that animation is not being done
             if (!combatController.DoingKickAnimation())
             {
-                if (enemyHit) { kickScore += (kickScore / playerSettings.trickValues[Trick.EnemyHit]); }
-                Score += buildingScore + kickScore + grindingScore;
-                Debug.Log("Score added: " + (buildingScore + kickScore + grindingScore));
+                textAnimator.SetTrigger("ScoreAdded");
             }
             else
             {
-                Debug.Log("Lost score: " + (buildingScore + kickScore));
+                textAnimator.SetTrigger("ScoreLost");
             }
-
-            buildingScore = 0;
-            kickScore = 0;
-            grindingScore = 0;
-            enemyHit = false;
         }
+    }
+
+    public void AddBuildingScore()
+    {
+        Score += scoreToAdd;
+
+        LoseBuildingScore();
+        Debug.Log("Score added");
+    }
+
+    public void LoseBuildingScore()
+    {
+        buildingScoreTxt.text = "";
+
+        buildingScore = 0;
+        kickScore = 0;
+        grindingScore = 0;
+        enemyHit = false;
+        scoreToAdd = 0;
+        scoreAnimating = false;
+        Debug.Log("Score reset");
+
+        if (buildingScore > 0 || grindingScore > 0 || kickScore > 0)
+        {
+            SetBuildingScoreText();
+        }
+    }
+
+    int GetScoreToAdd()
+    {
+        if (enemyHit) { kickScore += (kickScore / playerSettings.trickValues[Trick.EnemyHit]); }
+
+        int num = buildingScore + kickScore + grindingScore;
+
+        buildingScore = 0;
+        kickScore = 0;
+        grindingScore = 0;
+        enemyHit = false;
+
+        return num;
     }
 
     public void AddTrick(Trick _trick, float _grindTime = 0.0f)
@@ -85,7 +127,23 @@ public class PlayerScore : MonoBehaviour
         else if (_trick == Trick.Grind) { grindingScore += Mathf.FloorToInt((float)playerSettings.trickValues[Trick.Grind] * _grindTime); }
         else { buildingScore += playerSettings.trickValues[_trick]; }
 
-        Debug.Log("Added trick: " + _trick);
+        if (!scoreAnimating)
+        {
+            SetBuildingScoreText();
+        }
+            
+    }
+
+    void SetBuildingScoreText()
+    {
+        if (enemyHit)
+        {
+            buildingScoreTxt.text = "+" + (buildingScore + grindingScore + (kickScore + kickScore / playerSettings.trickValues[Trick.EnemyHit]));
+        }
+        else
+        {
+            buildingScoreTxt.text = "+" + (buildingScore + grindingScore + kickScore);
+        }
     }
 
     private void OnScoreChanged(int delta)
