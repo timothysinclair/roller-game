@@ -7,7 +7,7 @@
 		_MainTex2("Texture2", 2D) = "white" {}
 
 		_BlendTex("Blend Texture", 2D) = "white" {}
-		_Blend("Blend Value", Range(-2, 2)) = 0.0
+		_Blend("Blend Value", Range(0, 1)) = 0.0
 	}
 		SubShader
 		{
@@ -37,6 +37,9 @@
 
 					fixed4 c = lerp(tex2D(_MainTex, IN.uv_MainTex), tex2D(_MainTex2, IN.uv_MainTex2), finBlend);
 					o.Albedo = c.rgb;
+
+					/*fixed4 c = lerp(tex2D(_MainTex, IN.uv_MainTex), tex2D(_MainTex2, IN.uv_MainTex2), _Blend) * _Color;
+					o.Albedo = c.rgb;*/
 				}
 
 				ENDCG

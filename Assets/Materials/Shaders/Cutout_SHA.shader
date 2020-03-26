@@ -8,6 +8,8 @@
 
 	Subshader
 	{
+			Cull Off
+
 		Pass
 		{
 			AlphaTest Greater [_Cutoff]

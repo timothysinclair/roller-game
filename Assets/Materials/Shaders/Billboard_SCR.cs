@@ -33,16 +33,16 @@ public class Billboard_SCR : MonoBehaviour
         }
         else
         {
-            blendVal = Mathf.Sin(Time.fixedTime * Mathf.PI * speed) * 2;
+            blendVal = Mathf.Sin(Time.fixedTime * Mathf.PI * speed) / 2.0f + 0.5f;
             rend.material.SetFloat("_Blend", blendVal);
 
-            if (blendVal <= -1.95f)
+            if (blendVal <= 0f)
             {
                 blendVal = -2.0f;
                 adTimeCur = adTime;
             }
 
-            if (blendVal >= 1.95f)
+            if (blendVal >= 1f)
             {
                 blendVal = 12.0f;
                 adTimeCur = adTime;
