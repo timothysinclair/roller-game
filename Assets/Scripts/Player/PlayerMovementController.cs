@@ -10,6 +10,7 @@ public class PlayerMovementController : MonoBehaviour
 {
     // PUBLIC //
     public PlayerAnimations playerAnimations;
+    public CinemachineStateDrivenCamera playerCam;
 
     public bool useJumpAttackGravity = false;
     public bool tryBoost = false;
@@ -44,6 +45,7 @@ public class PlayerMovementController : MonoBehaviour
     [HideInInspector] public PlayerBoosting boostingState;
     [HideInInspector] public float maxSpeed;
     [HideInInspector] public float boostingMaxSpeed;
+    [HideInInspector] public float boostJumpMultiplier = 1.0f;
 
     private void Awake()
     {
@@ -310,7 +312,9 @@ public class PlayerMovementController : MonoBehaviour
         float right = moveInput.normalized.x * playerSettings.boostJumpHorForce;
         float up = playerSettings.boostJumpVertForce;
 
-        Vector3 boostJumpVector = transform.rotation * new Vector3(right, up, forward);
+        Debug.Log(boostJumpMultiplier);
+
+        Vector3 boostJumpVector = transform.rotation * new Vector3(right, up, forward) * boostJumpMultiplier;
         usedBoostJump = true;
 
         turnAngleTotal = 0.0f;

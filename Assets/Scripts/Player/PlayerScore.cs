@@ -182,6 +182,7 @@ public class PlayerScore : MonoBehaviour
 
         movementController.maxSpeed = currentRank.maxSpeed;
         movementController.boostingMaxSpeed = currentRank.boostingMaxSpeed;
+        movementController.boostJumpMultiplier = currentRank.boostJumpMultiplier;
     }
 
     public void CollectCollectible()
