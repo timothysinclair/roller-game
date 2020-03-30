@@ -13,6 +13,7 @@ public class DummyScript : MonoBehaviour
         set
         {
             if (value < m_health) { enemyAnimator.SetTrigger("Damaged"); }
+            
             m_health = value;
             if (value <= 0) { Died(); }
         }
@@ -30,12 +31,17 @@ public class DummyScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (dead) { return; }
+        
 
         if (other.tag == "KickAttackHB")
         {
+            AudioManager.Instance.PlaySoundVaried("Robot Hit");
+
+            if (dead) { return; }
+
             if (useJumpAttackGrav) { GameObject.FindObjectOfType<PlayerCombatController>().FloatingEnemyHit(); }
             Health -= 1;
+
         }
     }
 
@@ -57,6 +63,7 @@ public class DummyScript : MonoBehaviour
     void Died()
     {
         dead = true;
+        AudioManager.Instance.PlaySoundVaried("Robot Death");
         Debug.Log("Dummy died");
     }
 

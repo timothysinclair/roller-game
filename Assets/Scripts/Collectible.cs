@@ -38,6 +38,15 @@ public class Collectible : MonoBehaviour
 
         transform.DOLocalMove(transform.position + Vector3.up * 6.0f, 0.5f).SetEase(Ease.InOutCubic);
 
+        AudioManager.Instance.PlaySoundVaried("Pickup Can");
+        StartCoroutine(PlayShakeSound());
+
+    }
+
+    private IEnumerator PlayShakeSound()
+    {
+        yield return new WaitForSeconds(0.3f);
+        AudioManager.Instance.PlaySoundVaried("Shake Can");
     }
 
     private void OnDestroy()

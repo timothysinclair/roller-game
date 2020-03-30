@@ -82,6 +82,8 @@ public class PlayerCombatController : MonoBehaviour
     {
         currentAttackState = (resetAttackChain) ? AttackState.FIRST : (AttackState)(int)currentAttackState + 1;
 
+        AudioManager.Instance.PlaySoundVaried("Kick" + (int)currentAttackState);
+
         //timeSinceLastAttack = 0.0f;
 
         playerAnimator.SetInteger("KickState", (int)currentAttackState);
