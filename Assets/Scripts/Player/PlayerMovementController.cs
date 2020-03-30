@@ -328,6 +328,7 @@ public class PlayerMovementController : MonoBehaviour
         rigidBody.velocity = playerVelocity;
 
         rigidBody.AddForce(boostJumpVector, ForceMode.Impulse);
+        AudioManager.Instance.PlaySoundVaried("Boost Jump");
     }
 
     private void CheckGrounded()
