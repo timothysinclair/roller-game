@@ -71,10 +71,12 @@ public class PlayerScore : MonoBehaviour
             if (!combatController.DoingKickAnimation())
             {
                 textAnimator.SetTrigger("ScoreAdded");
+                AudioManager.Instance.PlaySoundVaried("Score Increase");
             }
             else
             {
                 textAnimator.SetTrigger("ScoreLost");
+                AudioManager.Instance.PlaySoundVaried("Score Lost");
             }
         }
     }
@@ -85,6 +87,7 @@ public class PlayerScore : MonoBehaviour
 
         LoseBuildingScore();
         Debug.Log("Score added");
+        
     }
 
     public void LoseBuildingScore()
@@ -103,6 +106,8 @@ public class PlayerScore : MonoBehaviour
         {
             SetBuildingScoreText();
         }
+
+
     }
 
     int GetScoreToAdd()
@@ -183,6 +188,8 @@ public class PlayerScore : MonoBehaviour
         movementController.maxSpeed = currentRank.maxSpeed;
         movementController.boostingMaxSpeed = currentRank.boostingMaxSpeed;
         movementController.boostJumpMultiplier = currentRank.boostJumpMultiplier;
+
+        AudioManager.Instance.PlaySoundVaried("Rank Up");
     }
 
     public void CollectCollectible()

@@ -82,6 +82,8 @@ public class PlayerCombatController : MonoBehaviour
     {
         currentAttackState = (resetAttackChain) ? AttackState.FIRST : (AttackState)(int)currentAttackState + 1;
 
+        AudioManager.Instance.PlaySoundVaried("Kick" + (int)currentAttackState);
+
         //timeSinceLastAttack = 0.0f;
 
         playerAnimator.SetInteger("KickState", (int)currentAttackState);
@@ -139,6 +141,8 @@ public class PlayerCombatController : MonoBehaviour
         _rigidBody.AddForce(pushDir * Time.deltaTime * 2000.0f, ForceMode.Impulse);
         lastEnemyHit.GetComponent<Rigidbody>().AddForce(-pushDir * Time.deltaTime * 2000.0f, ForceMode.Impulse);
         Debug.Log("Push back");
+
+        lastEnemyHit.GetComponent<DummyScript>().CheckIfDead();
     }
 
     public void FloatingEnemyHit()
