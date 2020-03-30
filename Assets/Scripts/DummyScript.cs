@@ -20,7 +20,7 @@ public class DummyScript : MonoBehaviour
 
     PlayerSettings playerSettings;
     Rigidbody _rigidBody;
-    int m_health = 3;
+    int m_health = 1;
 
     private void Awake()
     {
@@ -57,7 +57,14 @@ public class DummyScript : MonoBehaviour
     void Died()
     {
         dead = true;
-        //GetComponent<Collider>().isTrigger = true;
         Debug.Log("Dummy died");
+    }
+
+    public void CheckIfDead()
+    {
+        if (dead)
+        {
+            Destroy(this.gameObject);
+        }
     }
 }
