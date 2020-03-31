@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class PlayerDrifting : PlayerState
 {
+    public GameObject[] effects;
+    public AudioSource driftLoop;
+
+    private bool effectsActive = false;
+
     public override void OnAwake()
     {
 
@@ -11,12 +16,12 @@ public class PlayerDrifting : PlayerState
 
     public override void OnEnter()
     {
-        playerAnimations.drifting = true;
+        ActivateEffects();
     }
 
     public override void OnExit()
     {
-        playerAnimations.drifting = false;
+        DeactivateEffects();
     }
 
     public override void OnFixedUpdate()
@@ -29,11 +34,46 @@ public class PlayerDrifting : PlayerState
         if (!Active) { return; }
 
         if (Mathf.Abs(steering) > 0.1f) { playerAnimations.driftIsRight = (steering >= 0.0f); }
+
+        if (movementController.brakingState.Active || !isGrounded)
+        {
+            if (effectsActive) { DeactivateEffects(); }
+        }
+        else if (isGrounded)
+        {
+            if (!effectsActive) { ActivateEffects(); }
+        }
     }
 
     public override void OnUpdate()
     {
         if (!Active) { return; }
 
+        float speed = rigidBody.velocity.magnitude;
+        float quot = Mathf.Clamp(speed / movementController.boostingMaxSpeed, 0.0f, 1.0f);
+        driftLoop.volume = Mathf.Lerp(0.0f, 1.0f, quot);
+        driftLoop.pitch = Mathf.Lerp(0.5f, 1.0f, quot);
+    }
+
+    private void ActivateEffects()
+    {
+        for (int i = 0; i < effects.Length; i++)
+        {
+            effects[i].SetActive(true);
+        }
+
+        effectsActive = true;
+        playerAnimations.drifting = true;
+    }
+
+    private void DeactivateEffects()
+    {
+        for (int i = 0; i < effects.Length; i++)
+        {
+            effects[i].SetActive(false);
+        }
+
+        effectsActive = false;
+        playerAnimations.drifting = false;
     }
 }
