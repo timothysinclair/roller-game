@@ -40,10 +40,12 @@ public class PlayerScore : MonoBehaviour
         {
             int oldScore = score;
             int newScore = Mathf.Clamp(value, 0, maxScore);
+
+            int deltaUnclamped = value - oldScore;
             int delta = newScore - oldScore;
             score = newScore;
 
-            if (delta != 0) { OnScoreChanged(delta); }
+            if (delta != 0) { OnScoreChanged(delta, deltaUnclamped); }
         }
     }
 
@@ -151,11 +153,11 @@ public class PlayerScore : MonoBehaviour
         }
     }
 
-    private void OnScoreChanged(int delta)
+    private void OnScoreChanged(int delta, int deltaUnclamped)
     {
         if (scoreText) scoreText.text = "Score: " + score;
         UpdateRankSprite();
-        movementController.boostingState.Boost += delta * playerSettings.scoreToBoostRatio;
+        movementController.boostingState.Boost += deltaUnclamped * playerSettings.scoreToBoostRatio;
     }
 
     private void UpdateRankSprite()
