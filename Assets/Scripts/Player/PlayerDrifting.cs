@@ -51,7 +51,7 @@ public class PlayerDrifting : PlayerState
 
         float speed = rigidBody.velocity.magnitude;
         float quot = Mathf.Clamp(speed / movementController.boostingMaxSpeed, 0.0f, 1.0f);
-        driftLoop.volume = Mathf.Lerp(0.25f, 1.0f, quot);
+        driftLoop.volume = Mathf.Lerp(0.0f, 1.0f, quot);
         driftLoop.pitch = Mathf.Lerp(0.5f, 1.0f, quot);
     }
 

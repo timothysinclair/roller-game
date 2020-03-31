@@ -126,8 +126,8 @@ public class PlayerGrinding : PlayerState
 
     private void StartGrind(GrindRail rail, bool playSound)
     {
-        Active = true;
         currentRail = rail;
+        Active = true;
         if (playSound) { AudioManager.Instance.PlaySoundVaried("GrindStart"); }
 
         // Snap player to rail
