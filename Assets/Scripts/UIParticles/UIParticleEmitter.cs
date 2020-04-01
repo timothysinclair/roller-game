@@ -6,11 +6,11 @@ public class UIParticleEmitter : MonoBehaviour
 {
     [Header("Basics")]
     public Sprite texture;
-    public float duration;
+    public float duration = 5;
     public bool looping = true;
-    public float speed;
-    public float life;
-    public float size;
+    public float speed = 1;
+    public float life = 1;
+    public float size = 1;
     public Gradient colour;
     [SerializeField] private bool randomRotation = false;
     public float startRotation;
@@ -30,8 +30,8 @@ public class UIParticleEmitter : MonoBehaviour
 
     private void Start()
     {
-        curRate = 1.0f / rate;
-        curBurst = 1.0f / burstInterval;
+        curRate = 0;
+        curBurst = 0;
     }
 
     private void Update()
@@ -58,7 +58,7 @@ public class UIParticleEmitter : MonoBehaviour
             else
             {
                 CreateBurst();
-                curBurst = 1.0f / burstInterval;
+                curBurst = burstInterval;
             }
         }
 
