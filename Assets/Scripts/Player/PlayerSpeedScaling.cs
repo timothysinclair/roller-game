@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerSpeedScaling : MonoBehaviour
 {
     public Animator[] grindParticles;
+    public Animator playerAnimator;
+    public TrailRenderer[] trails;
 
     private PlayerMovementController movementController;
     private Rigidbody rigidBody;
@@ -30,5 +32,12 @@ public class PlayerSpeedScaling : MonoBehaviour
         grindParticles[0].speed = Mathf.Lerp(0.25f, 1.25f, amount);
         grindParticles[1].speed = Mathf.Lerp(0.25f, 1.25f, amount);
 
+        playerAnimator.SetFloat("SkateSpeed", Mathf.Lerp(0.15f, 0.8f, amount));
+
+        trails[0].transform.localScale = Vector3.one * Mathf.Lerp(0.0f, 2.0f, amount);
+        trails[1].transform.localScale = Vector3.one * Mathf.Lerp(0.0f, 2.0f, amount);
+
+        trails[0].time = Mathf.Lerp(0.1f, 0.25f, amount);
+        trails[1].time = Mathf.Lerp(0.1f, 0.25f, amount);
     }
 }

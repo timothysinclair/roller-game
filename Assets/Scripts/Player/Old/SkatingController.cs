@@ -20,7 +20,7 @@ public class SkatingController : MonoBehaviour
     [Range(0.0f, 1.0f)] public float steerHelper = 0.5f;
     [Range(0.0f, 1.0f)] public float driftSteerHelper = 0.5f;
 
-    [Header("Fuck you")]
+    [Header("Drag variables")]
     public float movingDrag = 0.5f;
     public float stationaryDrag = 0.9f;
     public float airDrag = 0.0f;

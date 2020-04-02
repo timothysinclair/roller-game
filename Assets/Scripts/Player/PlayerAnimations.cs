@@ -14,10 +14,12 @@ public class PlayerAnimations : MonoBehaviour
 
     [SerializeField] PlayerCombatController combatController;
     private Animator playerAnimator;
+    private AudioSource skateAudioSource;
 
     private void Awake()
     {
         playerAnimator = GetComponent<Animator>();
+        skateAudioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -39,5 +41,10 @@ public class PlayerAnimations : MonoBehaviour
     public void AEKickFinished()
     {
         combatController.AttackFinished();
+    }
+
+    public void AESkateSound()
+    {
+        skateAudioSource.Play();
     }
 }
