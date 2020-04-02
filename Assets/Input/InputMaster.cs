@@ -129,6 +129,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""3d09b4e0-288b-4053-b6a3-3ebda3581624"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
@@ -571,6 +579,28 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2ca7586e-54c4-4460-b41b-b888a8472599"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4c882e0a-a944-471a-b5da-b508ba2850eb"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -888,6 +918,74 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Conversation"",
+            ""id"": ""d6aaab35-cd58-459c-a760-f2b14ad53eb7"",
+            ""actions"": [
+                {
+                    ""name"": ""Accept"",
+                    ""type"": ""Button"",
+                    ""id"": ""f118947c-4552-47cd-a731-872eb15e0d2e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""Decline"",
+                    ""type"": ""Button"",
+                    ""id"": ""c73c403c-ae28-4c53-8045-e412f658f6f7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""bbfba7f1-66ac-452d-89fb-3012095572c8"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Accept"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f91e7650-578d-4810-90e2-b41d77ae2814"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Accept"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""97a1d03b-22b0-4b34-8bc4-b4f4e0ad178b"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Decline"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2810afbc-60d8-4470-a7cb-2f56708954b4"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Decline"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -936,12 +1034,17 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         m_Player_Grind = m_Player.FindAction("Grind", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
+        m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_Direction = m_Menu.FindAction("Direction", throwIfNotFound: true);
         m_Menu_Submit = m_Menu.FindAction("Submit", throwIfNotFound: true);
         m_Menu_MousePosition = m_Menu.FindAction("Mouse Position", throwIfNotFound: true);
         m_Menu_Click = m_Menu.FindAction("Click", throwIfNotFound: true);
+        // Conversation
+        m_Conversation = asset.FindActionMap("Conversation", throwIfNotFound: true);
+        m_Conversation_Accept = m_Conversation.FindAction("Accept", throwIfNotFound: true);
+        m_Conversation_Decline = m_Conversation.FindAction("Decline", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1005,6 +1108,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Attack;
     private readonly InputAction m_Player_Grind;
     private readonly InputAction m_Player_Movement;
+    private readonly InputAction m_Player_Interact;
     public struct PlayerActions
     {
         private @InputMaster m_Wrapper;
@@ -1023,6 +1127,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @Attack => m_Wrapper.m_Player_Attack;
         public InputAction @Grind => m_Wrapper.m_Player_Grind;
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
+        public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1074,6 +1179,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Movement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
                 @Movement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
                 @Movement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                @Interact.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
+                @Interact.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
+                @Interact.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1120,6 +1228,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
             }
         }
     }
@@ -1181,6 +1292,47 @@ public class @InputMaster : IInputActionCollection, IDisposable
         }
     }
     public MenuActions @Menu => new MenuActions(this);
+
+    // Conversation
+    private readonly InputActionMap m_Conversation;
+    private IConversationActions m_ConversationActionsCallbackInterface;
+    private readonly InputAction m_Conversation_Accept;
+    private readonly InputAction m_Conversation_Decline;
+    public struct ConversationActions
+    {
+        private @InputMaster m_Wrapper;
+        public ConversationActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Accept => m_Wrapper.m_Conversation_Accept;
+        public InputAction @Decline => m_Wrapper.m_Conversation_Decline;
+        public InputActionMap Get() { return m_Wrapper.m_Conversation; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(ConversationActions set) { return set.Get(); }
+        public void SetCallbacks(IConversationActions instance)
+        {
+            if (m_Wrapper.m_ConversationActionsCallbackInterface != null)
+            {
+                @Accept.started -= m_Wrapper.m_ConversationActionsCallbackInterface.OnAccept;
+                @Accept.performed -= m_Wrapper.m_ConversationActionsCallbackInterface.OnAccept;
+                @Accept.canceled -= m_Wrapper.m_ConversationActionsCallbackInterface.OnAccept;
+                @Decline.started -= m_Wrapper.m_ConversationActionsCallbackInterface.OnDecline;
+                @Decline.performed -= m_Wrapper.m_ConversationActionsCallbackInterface.OnDecline;
+                @Decline.canceled -= m_Wrapper.m_ConversationActionsCallbackInterface.OnDecline;
+            }
+            m_Wrapper.m_ConversationActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Accept.started += instance.OnAccept;
+                @Accept.performed += instance.OnAccept;
+                @Accept.canceled += instance.OnAccept;
+                @Decline.started += instance.OnDecline;
+                @Decline.performed += instance.OnDecline;
+                @Decline.canceled += instance.OnDecline;
+            }
+        }
+    }
+    public ConversationActions @Conversation => new ConversationActions(this);
     private int m_KeyboardSchemeIndex = -1;
     public InputControlScheme KeyboardScheme
     {
@@ -1215,6 +1367,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnAttack(InputAction.CallbackContext context);
         void OnGrind(InputAction.CallbackContext context);
         void OnMovement(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
     public interface IMenuActions
     {
@@ -1222,5 +1375,10 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnSubmit(InputAction.CallbackContext context);
         void OnMousePosition(InputAction.CallbackContext context);
         void OnClick(InputAction.CallbackContext context);
+    }
+    public interface IConversationActions
+    {
+        void OnAccept(InputAction.CallbackContext context);
+        void OnDecline(InputAction.CallbackContext context);
     }
 }
