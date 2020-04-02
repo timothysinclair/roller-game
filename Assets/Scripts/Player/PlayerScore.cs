@@ -14,6 +14,11 @@ public class PlayerScore : MonoBehaviour
     public TextMeshProUGUI currentCollectibles;
     public TextMeshProUGUI maxCollectibles;
 
+    public GameObject[] rankUpParticles;
+    public GameObject addScorePrefab;
+    public GameObject loseScorePrefab;
+    public GameObject scoreParentObj;
+
     [SerializeField] TextMeshProUGUI buildingScoreTxt;
     [SerializeField] Animator textAnimator;
 
@@ -82,6 +87,8 @@ public class PlayerScore : MonoBehaviour
             {
                 textAnimator.SetTrigger("ScoreLost");
                 AudioManager.Instance.PlaySoundVaried("Score Lost");
+                GameObject particles = Instantiate(loseScorePrefab, scoreParentObj.transform);
+                GameObject.Destroy(particles, 5.0f);
             }
         }
     }
@@ -92,7 +99,9 @@ public class PlayerScore : MonoBehaviour
 
         LoseBuildingScore();
         Debug.Log("Score added");
-        
+
+        GameObject particles = Instantiate(addScorePrefab, scoreParentObj.transform);
+        GameObject.Destroy(particles, 5.0f);
     }
 
     public void LoseBuildingScore()
@@ -112,7 +121,7 @@ public class PlayerScore : MonoBehaviour
             SetBuildingScoreText();
         }
 
-
+        
     }
 
     int GetScoreToAdd()
@@ -195,7 +204,31 @@ public class PlayerScore : MonoBehaviour
         movementController.boostingMaxSpeed = currentRank.boostingMaxSpeed;
         movementController.boostJumpMultiplier = currentRank.boostJumpMultiplier;
 
+        if (currentRank.name != "D") { PlayRankChangedParticle(currentRank.name); }
+
         AudioManager.Instance.PlaySoundVaried("Rank Up");
+    }
+
+    private void PlayRankChangedParticle(string newRank)
+    {
+        Dictionary<string, int> rankNums = new Dictionary<string, int>()
+        {
+            { "C", 0 },
+            { "B", 1 },
+            { "A", 2 },
+            { "S", 3 },
+        };
+
+        int newRankNum = rankNums[newRank];
+        rankUpParticles[newRankNum].SetActive(true);
+        StartCoroutine(DeactivateObjectAfter(rankUpParticles[newRankNum], 1.0f));
+    }
+
+    private IEnumerator DeactivateObjectAfter(GameObject obj, float afterSeconds)
+    {
+        yield return new WaitForSeconds(afterSeconds);
+
+        obj.SetActive(false);
     }
 
     public void CollectCollectible()

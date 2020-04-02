@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using DG.Tweening;
+
 public class DummyScript : MonoBehaviour
 {
     public bool useJumpAttackGrav = false;
@@ -35,8 +37,6 @@ public class DummyScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
-
         if (other.tag == "KickAttackHB")
         {
             AudioManager.Instance.PlaySoundVaried("Robot Hit");
@@ -67,8 +67,9 @@ public class DummyScript : MonoBehaviour
     void Died()
     {
         dead = true;
+        transform.DOScale(0.0f, 1.0f).SetEase(Ease.InOutElastic).OnComplete(() => Destroy(this.gameObject));
         AudioManager.Instance.PlaySoundVaried("Robot Death");
-        Debug.Log("Dummy died");
+        // Debug.Log("Dummy died");
     }
 
     public void CheckIfDead()

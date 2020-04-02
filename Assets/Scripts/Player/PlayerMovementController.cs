@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using DG.Tweening;
 
 using Cinemachine;
 
@@ -11,6 +12,7 @@ public class PlayerMovementController : MonoBehaviour
     // PUBLIC //
     public PlayerAnimations playerAnimations;
     public CinemachineStateDrivenCamera playerCam;
+    public GameObject landParticlePrefab;
 
     public bool useJumpAttackGravity = false;
     public bool tryBoost = false;
@@ -337,7 +339,9 @@ public class PlayerMovementController : MonoBehaviour
             // Was not grounded but now is
             landedThisFrame = true;
             usedBoostJump = false;
-            AudioManager.Instance.PlaySoundVaried("Landing");
+            OnLand();
+
+            
         }
         isGrounded = newGroundedVal;
         if (grindingState.Active) { isGrounded = true; }
@@ -403,8 +407,11 @@ public class PlayerMovementController : MonoBehaviour
             // Check if delta angle is within allowed range
             float dot = Vector3.Dot(transform.up, collision.GetContact(i).normal.normalized);
 
+            // Check if target is normal ground
+            float upDot = Vector3.Dot(Vector3.up, collision.GetContact(i).normal.normalized);
+
             // If the surface isn't similar enough, and the player is on the ground, or the surface is not on an allowed layer, don't count it as a surface
-            if ((dot < playerSettings.minSurfaceAlignDot && isGrounded) || playerSettings.groundLayers != (playerSettings.groundLayers | (1 << collision.gameObject.layer))) { continue; }
+            if (((dot < playerSettings.minSurfaceAlignDot && isGrounded) || playerSettings.groundLayers != (playerSettings.groundLayers | (1 << collision.gameObject.layer))) && upDot < 0.7f) { continue; }
             sumOfNormals += collision.GetContact(i).normal.normalized;
 
             // contactNormal = normal;
@@ -459,5 +466,21 @@ public class PlayerMovementController : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(transform.position, transform.position + -transform.up * playerSettings.groundSnapDistance);
 
+    }
+
+    private void OnLand()
+    {
+        AudioManager.Instance.PlaySoundVaried("Landing");
+
+        GameObject particles = Instantiate(landParticlePrefab, transform);
+
+        foreach (Transform child in particles.transform)
+        {
+            Sequence seq = DOTween.Sequence();
+            seq.AppendInterval(0.5f);
+            seq.Append(child.DOScale(0.0f, 0.5f));
+        }
+
+        GameObject.Destroy(particles, 1.5f);
     }
 }
