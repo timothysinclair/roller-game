@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using DG.Tweening;
 
 using Cinemachine;
 
@@ -11,6 +12,7 @@ public class PlayerMovementController : MonoBehaviour
     // PUBLIC //
     public PlayerAnimations playerAnimations;
     public CinemachineStateDrivenCamera playerCam;
+    public GameObject landParticlePrefab;
 
     public bool useJumpAttackGravity = false;
     public bool tryBoost = false;
@@ -337,7 +339,9 @@ public class PlayerMovementController : MonoBehaviour
             // Was not grounded but now is
             landedThisFrame = true;
             usedBoostJump = false;
-            AudioManager.Instance.PlaySoundVaried("Landing");
+            OnLand();
+
+            
         }
         isGrounded = newGroundedVal;
         if (grindingState.Active) { isGrounded = true; }
@@ -462,5 +466,21 @@ public class PlayerMovementController : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(transform.position, transform.position + -transform.up * playerSettings.groundSnapDistance);
 
+    }
+
+    private void OnLand()
+    {
+        AudioManager.Instance.PlaySoundVaried("Landing");
+
+        GameObject particles = Instantiate(landParticlePrefab, transform);
+
+        foreach (Transform child in particles.transform)
+        {
+            Sequence seq = DOTween.Sequence();
+            seq.AppendInterval(0.5f);
+            seq.Append(child.DOScale(0.0f, 0.5f));
+        }
+
+        GameObject.Destroy(particles, 1.5f);
     }
 }
