@@ -31,6 +31,7 @@ public class PlayerScore : MonoBehaviour
     private int collectiblesCollected = 0;
     private int totalCollectibles;
     bool scoreAnimating = false;
+    private Rigidbody rigidBody;
 
     int score = 0;
     private int Score
@@ -45,7 +46,7 @@ public class PlayerScore : MonoBehaviour
             int delta = newScore - oldScore;
             score = newScore;
 
-            if (delta != 0) { OnScoreChanged(delta, deltaUnclamped); }
+            if (delta != 0 || deltaUnclamped != 0) { OnScoreChanged(delta, deltaUnclamped); }
         }
     }
 
@@ -55,6 +56,7 @@ public class PlayerScore : MonoBehaviour
         combatController = GetComponent<PlayerCombatController>();
         playerSettings = Resources.Load<PlayerSettings>("ScriptableObjects/PlayerSettings");
         maxScore = playerSettings.playerRanks[playerSettings.playerRanks.Length - 1].exitScore;
+        rigidBody = GetComponent<Rigidbody>();
 
         totalCollectibles = FindObjectsOfType<Collectible>().Length;
         maxCollectibles.text = totalCollectibles.ToString();
@@ -74,6 +76,7 @@ public class PlayerScore : MonoBehaviour
             {
                 textAnimator.SetTrigger("ScoreAdded");
                 AudioManager.Instance.PlaySoundVaried("Score Increase");
+                rigidBody.AddForce(transform.forward * scoreToAdd * 120.0f);
             }
             else
             {
@@ -156,7 +159,8 @@ public class PlayerScore : MonoBehaviour
     private void OnScoreChanged(int delta, int deltaUnclamped)
     {
         if (scoreText) scoreText.text = "Score: " + score;
-        UpdateRankSprite();
+
+        if (delta != 0) { UpdateRankSprite(); }
         movementController.boostingState.Boost += deltaUnclamped * playerSettings.scoreToBoostRatio;
     }
 

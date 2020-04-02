@@ -310,11 +310,9 @@ public class PlayerMovementController : MonoBehaviour
         // Calculate jump vector
         float forward = moveInput.normalized.y * playerSettings.boostJumpHorForce;
         float right = moveInput.normalized.x * playerSettings.boostJumpHorForce;
-        float up = playerSettings.boostJumpVertForce;
+        float up = playerSettings.boostJumpVertForce * boostJumpMultiplier;
 
-        Debug.Log(boostJumpMultiplier);
-
-        Vector3 boostJumpVector = transform.rotation * new Vector3(right, up, forward) * boostJumpMultiplier;
+        Vector3 boostJumpVector = transform.rotation * new Vector3(right, up, forward);
         usedBoostJump = true;
 
         turnAngleTotal = 0.0f;
@@ -339,6 +337,7 @@ public class PlayerMovementController : MonoBehaviour
             // Was not grounded but now is
             landedThisFrame = true;
             usedBoostJump = false;
+            AudioManager.Instance.PlaySoundVaried("Landing");
         }
         isGrounded = newGroundedVal;
         if (grindingState.Active) { isGrounded = true; }
