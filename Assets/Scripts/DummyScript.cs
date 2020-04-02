@@ -22,11 +22,15 @@ public class DummyScript : MonoBehaviour
     PlayerSettings playerSettings;
     Rigidbody _rigidBody;
     int m_health = 1;
+    Vector3 spawnPos;
+    Quaternion spawnRot;
 
     private void Awake()
     {
         playerSettings = Resources.Load<PlayerSettings>("ScriptableObjects/PlayerSettings");
         _rigidBody = GetComponent<Rigidbody>();
+        spawnPos = transform.position;
+        spawnRot = transform.localRotation;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -71,7 +75,10 @@ public class DummyScript : MonoBehaviour
     {
         if (dead)
         {
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
+            transform.position = spawnPos;
+            transform.localRotation = spawnRot;
+            this.gameObject.SetActive(false);
         }
     }
 }

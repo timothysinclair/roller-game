@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerInput : MonoBehaviour
 {
+    [SerializeField] NPC npc; // Very jank
+
     private PlayerMovementController movementController;
     private Rigidbody rigidBody;
     private PlayerCombatController combatController;
@@ -22,6 +24,7 @@ public class PlayerInput : MonoBehaviour
     {
         movementController = GetComponent<PlayerMovementController>();
         combatController = GetComponent<PlayerCombatController>();
+        rigidBody = GetComponent<Rigidbody>();
 
         // Input setup
         controls = new InputMaster();
@@ -46,6 +49,11 @@ public class PlayerInput : MonoBehaviour
         // Combat
         controls.Player.Attack.performed += _ => combatController.BasicAttack();
 
+        // Interact
+        controls.Player.Interact.performed += _ => npc.Interact();
+        controls.Conversation.Accept.performed += _ => npc.Accept();
+        controls.Conversation.Decline.performed += _ => npc.Decline();
+
         // Cursor
         //Cursor.visible = false;
         //Cursor.lockState = CursorLockMode.Locked;
@@ -68,5 +76,20 @@ public class PlayerInput : MonoBehaviour
     private void Steering(float steeringValue)
     {
         steeringInput = steeringValue;
+    }
+
+    public void SetControls(bool _moveable)
+    {
+        if (_moveable)
+        {
+            controls.Player.Enable();
+            controls.Conversation.Disable();
+        }
+        else
+        {
+            rigidBody.velocity = Vector3.zero;
+            controls.Player.Disable();
+            controls.Conversation.Enable();
+        }
     }
 }

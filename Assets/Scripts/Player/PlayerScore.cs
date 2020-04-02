@@ -203,4 +203,10 @@ public class PlayerScore : MonoBehaviour
         collectiblesCollected += 1;
         currentCollectibles.text = collectiblesCollected.ToString();
     }
+
+    public void CollectibleReset()
+    {
+        collectiblesCollected -= 1;
+        currentCollectibles.text = collectiblesCollected.ToString();
+    }
 }

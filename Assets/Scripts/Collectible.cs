@@ -31,10 +31,12 @@ public class Collectible : MonoBehaviour
 
     private void OnCollected()
     {
+        isCollected = true;
+
         Sequence seq = DOTween.Sequence();
         seq.Append(transform.DOScale(1.6f, 0.3f).SetEase(Ease.InOutCubic));
         seq.AppendInterval(0.3f);
-        seq.Append(transform.DOScale(0.0f, 0.3f).SetEase(Ease.InOutCubic).OnComplete(() => Destroy(this.gameObject)));
+        seq.Append(transform.DOScale(0.0f, 0.3f).SetEase(Ease.InOutCubic).OnComplete(() => this.gameObject.SetActive(false)));
 
         transform.DOLocalMove(transform.position + Vector3.up * 6.0f, 0.5f).SetEase(Ease.InOutCubic);
 
@@ -52,6 +54,21 @@ public class Collectible : MonoBehaviour
     private void OnDestroy()
     {
         transform.DOKill();
+    }
+
+    public void Initialise()
+    {
+        if (!isCollected) { return; }
+
+        isCollected = false;
+        transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+        transform.position = transform.position - Vector3.up * 6.0f;
+
+        PlayerScore player = GameObject.FindObjectOfType<PlayerScore>();
+        if (player)
+        {
+            player.CollectibleReset();
+        }
     }
 }
 
