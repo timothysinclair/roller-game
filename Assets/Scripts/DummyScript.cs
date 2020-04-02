@@ -67,7 +67,7 @@ public class DummyScript : MonoBehaviour
     void Died()
     {
         dead = true;
-        transform.DOScale(0.0f, 1.0f).SetEase(Ease.InOutElastic).OnComplete(() => Destroy(this.gameObject));
+        transform.DOScale(0.0f, 1.0f).SetEase(Ease.InOutElastic).OnComplete(() => this.gameObject.SetActive(false));
         AudioManager.Instance.PlaySoundVaried("Robot Death");
         // Debug.Log("Dummy died");
     }
