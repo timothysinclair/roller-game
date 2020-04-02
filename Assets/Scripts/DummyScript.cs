@@ -26,6 +26,7 @@ public class DummyScript : MonoBehaviour
     int m_health = 1;
     Vector3 spawnPos;
     Quaternion spawnRot;
+    Vector3 myScale;
 
     private void Awake()
     {
@@ -33,6 +34,7 @@ public class DummyScript : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody>();
         spawnPos = transform.position;
         spawnRot = transform.localRotation;
+        myScale = transform.localScale;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -81,5 +83,10 @@ public class DummyScript : MonoBehaviour
             transform.localRotation = spawnRot;
             this.gameObject.SetActive(false);
         }
+    }
+
+    public void ResetScale()
+    {
+        transform.localScale = myScale;
     }
 }

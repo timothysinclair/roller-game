@@ -9,7 +9,7 @@ public class ButtonHandler : MonoBehaviour
     public void Play()
     {
         // Load first level
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene("MainSceneTim");
     }
 
     public void Quit()

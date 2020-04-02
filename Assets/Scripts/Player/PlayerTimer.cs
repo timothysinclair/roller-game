@@ -7,8 +7,8 @@ public class PlayerTimer : MonoBehaviour
 {
     [SerializeField] GameObject startLine;
     [SerializeField] Transform spawnPoint;
-    [SerializeField] Collectible[] collectables;
-    [SerializeField] DummyScript[] enemies;
+    Collectible[] collectables;
+    DummyScript[] enemies;
 
     [HideInInspector] public float currentTime = 0.0f;
     public TextMeshProUGUI timerText;
@@ -20,18 +20,28 @@ public class PlayerTimer : MonoBehaviour
         //StartTimer();
         collectables = GameObject.FindObjectsOfType<Collectible>();
         enemies = GameObject.FindObjectsOfType<DummyScript>();
+
+        foreach (DummyScript enemy in enemies)
+        {
+            enemy.gameObject.SetActive(false);
+        }
     }
 
     public void StartTimer()
     {
         for (int i = 0; i < collectables.Length; i++)
         {
+            // if (!collectables[i].gameObject.activeSelf) { collectables[i].gameObject.SetActive(true); }
+            collectables[i].gameObject.SetActive(true);
             collectables[i].Initialise();
         }
+
         for (int i = 0; i < enemies.Length; i++)
         {
             enemies[i].gameObject.SetActive(true);
             enemies[i].GetComponent<Rigidbody>().velocity = Vector3.zero;
+            enemies[i].GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            enemies[i].ResetScale();
         }
 
         currentTime = 0.0f;

@@ -9,8 +9,8 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: 5a1f1809ae09dd24585fc444c21005e4
   - enabled: 1
-    path: Assets/Scenes/TimScene4.unity
-    guid: 89e2f1332eed3544aaea0f22a3b87d5a
+    path: Assets/Scenes/MainSceneTim.unity
+    guid: f6356dfc845b0fc419b754ba39a25afe
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: aac14ce38ba12ad498dceb344da5dd10,
       type: 2}

@@ -9,11 +9,14 @@ public class Collectible : MonoBehaviour
     private static float spinDuration = 3.0f;
 
     private bool isCollected = false;
+    private Vector3 startingPosition;
 
     private void Awake()
     {
+        startingPosition = transform.position;
         // Spin
         transform.DOLocalRotate(new Vector3(0.0f, 360.0f, 0.0f), spinDuration, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(-1);
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -42,7 +45,6 @@ public class Collectible : MonoBehaviour
 
         AudioManager.Instance.PlaySoundVaried("Pickup Can");
         StartCoroutine(PlayShakeSound());
-
     }
 
     private IEnumerator PlayShakeSound()
@@ -61,8 +63,8 @@ public class Collectible : MonoBehaviour
         if (!isCollected) { return; }
 
         isCollected = false;
-        transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-        transform.position = transform.position - Vector3.up * 6.0f;
+        transform.localScale = Vector3.one;
+        transform.position = startingPosition;
 
         PlayerScore player = GameObject.FindObjectOfType<PlayerScore>();
         if (player)
